@@ -1,10 +1,5 @@
-import { AppProvider } from '@/app/provider'
-import { AppRouter } from '@/app/router'
+import { QuizBox } from '@/features/quiz/components/quiz-box.tsx'
 
 export function App() {
-  return (
-    <AppProvider>
-      <AppRouter />
-    </AppProvider>
-  )
+  return <QuizBox header="Quiz App" question={''} options={[]}></QuizBox>
 }
