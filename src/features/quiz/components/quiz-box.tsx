@@ -4,12 +4,18 @@ type QuizBoxProps = {
   options: string[]
 }
 
-export function QuizBox({ header, question }: React.PropsWithChildren<QuizBoxProps>) {
+export function QuizBox({ header, question }: QuizBoxProps) {
   return (
-    <div className="relative max-w-[240px] max-h-[880px] rounded-[56px] bg-white px-60 py-40">
-      <h1 className=" text-4xl absolute top-4 left-1/2 -translate-x-1/2  font-bold">{header}</h1>
+    <div className="relative w-full max-w-[760px] rounded-[56px] bg-white px-6 pb-10 pt-20 shadow-[0_12px_28px_rgba(0,0,0,0.12)] md:px-12 md:pb-14 md:pt-24">
+      <h1 className="absolute left-1/2 top-6 -translate-x-1/2 text-2xl font-bold md:text-4xl">
+        {header}
+      </h1>
 
-      <h2 className="text-lg font-semibold ">{question}</h2>
+      <div className="max-h-[56vh] overflow-y-auto pr-1 md:max-h-[60vh]">
+        <p className="whitespace-pre-line text-base font-semibold leading-relaxed md:text-lg">
+          {question}
+        </p>
+      </div>
     </div>
   )
 }

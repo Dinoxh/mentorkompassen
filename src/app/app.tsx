@@ -2,12 +2,18 @@ import { QuizBox } from '@/features/quiz/components/quiz-box.tsx'
 
 export function App() {
   return (
-    <main className="min-h-screen bg-[#EFEEE7] flex items-center justify-center">
+    <main className="relative min-h-screen bg-[#EFEEE7] flex items-center justify-center px-4 py-8">
+      <a className="mentor-brand" href="https://mentor.se" aria-label="Mentor startsida">
+        <img src="/mentor-logo.svg" alt="Mentor" />
+      </a>
+
       <QuizBox
         header="Mentor kompassen"
-        question="What are you doing today?"
+        question={
+          'I Mentor Boost utgår vi från en modell som heter IKIGAI. IKIGAI är japanska och betyder ungefär; anledning att finnas till eller din drivkraft.\n\nHär skapar du din IKIGAI-kompass som ska hjälpa dig att sätta upp mål i ditt liv och när du behöver ta viktiga beslut om studier, jobb, fritid och relationer.'
+        }
         options={[]}
-      ></QuizBox>
+      />
     </main>
   )
 }

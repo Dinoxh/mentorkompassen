@@ -10,7 +10,7 @@
   line-height: 1.5;
   font-weight: 400;
   color: #111827;
-  background-color: #f3f4f6;
+  background-color: #efeee7;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -29,12 +29,33 @@ body {
   min-height: 100vh;
 }
 
-#root {
-  min-height: 100vh;
-}
-
 .app-shell {
   max-width: 960px;
   margin: 0 auto;
   padding: 3rem 1.5rem;
+}
+
+.mentor-brand {
+  left: max(1rem, env(safe-area-inset-left));
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top));
+  width: auto;
+  z-index: 50;
+}
+
+.mentor-brand img {
+  height: auto;
+  padding-bottom: 8px;
+  width: 110px;
+}
+
+@media (min-width: 768px) {
+  .mentor-brand {
+    left: max(1.5rem, env(safe-area-inset-left));
+    top: max(1.5rem, env(safe-area-inset-top));
+  }
+
+  .mentor-brand img {
+    width: 136px;
+  }
 }
