@@ -1,3 +1,4 @@
+import { QuizButton } from '@/features/quiz/components/quiz-button.tsx'
 import { QuizBox } from '@/features/quiz/components/quiz-box.tsx'
 
 export function App() {
@@ -7,13 +8,17 @@ export function App() {
         <img src="/mentor-logo.svg" alt="Mentor" />
       </a>
 
-      <QuizBox
-        header="Mentor kompassen"
-        question={
-          'I Mentor Boost utgår vi från en modell som heter IKIGAI. IKIGAI är japanska och betyder ungefär; anledning att finnas till eller din drivkraft.\n\nHär skapar du din IKIGAI-kompass som ska hjälpa dig att sätta upp mål i ditt liv och när du behöver ta viktiga beslut om studier, jobb, fritid och relationer.'
-        }
-        options={[]}
-      />
+      <div className="w-full max-w-[760px]">
+        <QuizBox
+          header="Mentor kompassen"
+          question={
+            'I Mentor Boost utgår vi från en modell som heter IKIGAI. IKIGAI är japanska och betyder ungefär; anledning att finnas till eller din drivkraft.\n\nHär skapar du din IKIGAI-kompass som ska hjälpa dig att sätta upp mål i ditt liv och när du behöver ta viktiga beslut om studier, jobb, fritid och relationer.'
+          }
+          options={[]}
+        >
+          <QuizButton label="Nästa" />
+        </QuizBox>
+      </div>
     </main>
   )
 }

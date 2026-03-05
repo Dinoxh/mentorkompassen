@@ -1,32 +1,32 @@
+import mentorPrinciplesPng from '@/features/quiz/assets/Mentor 4 principles.png'
+
 type QuizBoxProps = {
   header: string
   question: string
   options: string[]
-  onNext?: () => void
+  children?: React.ReactNode
 }
 
-export function QuizBox({ header, question, onNext }: QuizBoxProps) {
+export function QuizBox({ header, question, children }: QuizBoxProps) {
   return (
-    <div className="relative w-full max-w-[760px] rounded-[56px] bg-white px-6 pb-10 pt-20 shadow-[0_12px_28px_rgba(0,0,0,0.12)] md:px-12 md:pb-14 md:pt-24">
-      <h1 className="absolute left-1/2 top-6 -translate-x-1/2 text-2xl font-bold md:text-4xl">
+    <div className="relative w-full max-w-[760px] rounded-[56px] bg-white px-6 pb-8 pt-16 shadow-[0_12px_28px_rgba(0,0,0,0.12)] md:px-10 md:pb-10 md:pt-20">
+      <h1 className="absolute left-1/2 top-5 -translate-x-1/2 text-2xl font-bold md:text-3xl">
         {header}
       </h1>
 
-      <div className="max-h-[56vh] overflow-y-auto pr-1 md:max-h-[60vh]">
-        <p className="whitespace-pre-line text-base font-semibold leading-relaxed md:text-lg">
+      <div>
+        <img
+          src={mentorPrinciplesPng}
+          alt="Mentor 4 principles"
+          className="mx-auto mb-4 w-[62%] md:mb-5 md:w-[54%]"
+        />
+
+        <p className="whitespace-pre-line text-sm font-semibold leading-snug md:text-base">
           {question}
         </p>
       </div>
 
-      <div className="mt-6 flex justify-center md:mt-8">
-        <button
-          type="button"
-          onClick={onNext}
-          className="rounded-full bg-[#ffff5c] px-10 py-3 text-lg font-bold text-black shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition hover:brightness-95"
-        >
-          Nästa
-        </button>
-      </div>
+      {children ? <div className="mt-5 flex justify-center md:mt-6">{children}</div> : null}
     </div>
   )
 }
