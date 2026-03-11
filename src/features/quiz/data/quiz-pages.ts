@@ -10,6 +10,27 @@ export type Principle = {
   iconAlt: string
 }
 
+export type PropertyGroup = {
+  letter: string
+  properties: string[]
+}
+
+export type PropertySelectionTheme = {
+  backgroundColor: string
+  activeBackgroundColor: string
+}
+
+export type PropertySelectionPageData = {
+  title: string
+  subtitle: string
+  iconSrc: string
+  iconAlt: string
+  propertyGroups: PropertyGroup[]
+  theme: PropertySelectionTheme
+  maxSelections?: number
+  missingPropertiesHint?: string
+}
+
 export type QuizPage = {
   id: string
   header: string
@@ -21,6 +42,7 @@ export type QuizPage = {
   illustrationSrc?: string
   illustrationAlt?: string
   principles?: Principle[]
+  propertySelection?: PropertySelectionPageData
 }
 
 export const quizPages: QuizPage[] = [
@@ -38,6 +60,8 @@ export const quizPages: QuizPage[] = [
     question: 'Här är IKIGAI-kompassens fyra delar och vad de står för.',
     previousPageId: 'intro',
     previousButtonLabel: 'Tillbaka',
+    nextPageId: 'strengths',
+    nextButtonLabel: 'Nästa',
     illustrationSrc: '',
     illustrationAlt: '',
     principles: [
@@ -66,6 +90,159 @@ export const quizPages: QuizPage[] = [
         iconAlt: '',
       },
     ],
+  },
+  {
+    id: 'strengths',
+    header: 'Vad du är bra på',
+    question: 'Dina personliga egenskaper',
+    previousPageId: 'info',
+    previousButtonLabel: 'Tillbaka',
+    propertySelection: {
+      title: 'Vad du är bra på',
+      subtitle: 'Dina personliga egenskaper',
+      iconSrc: strengthsIcon,
+      iconAlt: 'Ikon för vad du är bra på',
+      theme: {
+        backgroundColor: '#00B469',
+        activeBackgroundColor: '#00A55D',
+      },
+      maxSelections: 5,
+      propertyGroups: [
+        {
+          letter: 'A',
+          properties: [
+            'Allvarlig',
+            'Aktsam',
+            'Alert',
+            'Ambitiös',
+            'Anpassningsbar',
+            'Ansvarsfull',
+            'Arbetsam',
+          ],
+        },
+        {
+          letter: 'B',
+          properties: ['Banbrytande', 'Behärskad', 'Beskyddande', 'Bestämd'],
+        },
+        {
+          letter: 'D',
+          properties: ['Diplomatisk', 'Disciplinerad', 'Diskret', 'Driven', 'Dynamisk'],
+        },
+        {
+          letter: 'E',
+          properties: [
+            'Effektiv',
+            'Eftertänksam',
+            'Ekonomisk',
+            'Energisk',
+            'Entusiastisk',
+            'Envis',
+            'Erfaren',
+            'Expert',
+          ],
+        },
+        {
+          letter: 'F',
+          properties: ['Flexibel', 'Följsam', 'Försiktig'],
+        },
+        {
+          letter: 'G',
+          properties: ['Genomtänkt', 'Glad'],
+        },
+        {
+          letter: 'I',
+          properties: ['Impulsiv', 'Initiativtagande', 'Innovativ', 'Insiktsfull'],
+        },
+        {
+          letter: 'K',
+          properties: [
+            'Karismatisk',
+            'Klarsynt',
+            'Klok',
+            'Kompetent',
+            'Konsekvent',
+            'Kreativ',
+            'Kvicktänkt',
+            'Känslig',
+          ],
+        },
+        {
+          letter: 'L',
+          properties: ['Lojal', 'Lugn', 'Lyhörd', 'Lättsam'],
+        },
+        {
+          letter: 'M',
+          properties: [
+            'Medmänsklig',
+            'Metodisk',
+            'Mjuk',
+            'Modig',
+            'Motiverad',
+            'Målinriktad',
+            'Mångsidig',
+          ],
+        },
+        {
+          letter: 'N',
+          properties: ['Noggrann', 'Nyfiken'],
+        },
+        {
+          letter: 'O',
+          properties: ['Objektiv', 'Omsorgsfull', 'Organiserad'],
+        },
+        {
+          letter: 'P',
+          properties: [
+            'Positiv',
+            'Praktisk',
+            'Pratsam',
+            'Prestigelös',
+            'Proffsig',
+            'Punktlig',
+            'Pålitlig',
+          ],
+        },
+        {
+          letter: 'R',
+          properties: ['Rationell', 'Realistisk', 'Resultatinriktad', 'Rolig', 'Rörlig'],
+        },
+        {
+          letter: 'S',
+          properties: [
+            'Saklig',
+            'Samarbetsvillig',
+            'Serviceminded',
+            'Smart',
+            'Snabb',
+            'Självgående',
+            'Självsäker',
+            'Stark',
+            'Strukturerad',
+            'Stresstålig',
+          ],
+        },
+        {
+          letter: 'T',
+          properties: ['Trovärdig', 'Taktisk', 'Tuff', 'Tålmodig'],
+        },
+        {
+          letter: 'U',
+          properties: ['Uppriktig', 'Uppskattande', 'Uthållig', 'Utåtriktad'],
+        },
+        {
+          letter: 'V',
+          properties: ['Vaksam', 'Vältränad'],
+        },
+        {
+          letter: 'Ä',
+          properties: ['Äventyrlig'],
+        },
+        {
+          letter: 'Ö',
+          properties: ['Ödmjuk', 'Öppen'],
+        },
+      ],
+    },
   },
 ]
 

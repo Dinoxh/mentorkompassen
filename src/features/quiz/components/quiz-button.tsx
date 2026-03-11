@@ -1,3 +1,5 @@
+import { getFilledQuizButtonProps } from '@/features/quiz/components/quiz-button-classes'
+
 type QuizButtonProps = {
   label: string
   onClick?: () => void
@@ -6,11 +8,20 @@ type QuizButtonProps = {
 }
 
 export function QuizButton({ label, onClick, type = 'button', className = '' }: QuizButtonProps) {
+  const buttonProps = getFilledQuizButtonProps(
+    {
+      backgroundColor: '#FFFF5C',
+      activeBackgroundColor: '#FFEB64',
+    },
+    className
+  )
+
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`rounded-full bg-[#ffff5c] px-10 py-3 text-lg font-bold text-black shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition hover:brightness-95 ${className}`.trim()}
+      className={buttonProps.className}
+      style={buttonProps.style}
     >
       {label}
     </button>
