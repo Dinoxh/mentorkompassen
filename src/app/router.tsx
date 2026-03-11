@@ -16,6 +16,9 @@ export function AppRouter() {
     const pageId = getPageIdFromHash(window.location.hash)
     return getQuizPage(pageId)?.id ?? defaultPage.id
   })
+  const [selectedPropertiesByPage, setSelectedPropertiesByPage] = useState<
+    Record<string, string[]>
+  >({})
 
   useEffect(() => {
     const syncPageWithHash = () => {
@@ -51,5 +54,33 @@ export function AppRouter() {
     window.location.hash = `/${currentPage.previousPageId}`
   }
 
-  return <HomeRoute page={currentPage} onBack={handleBack} onNext={handleNext} />
+  const handleToggleProperty = (property: string) => {
+    setSelectedPropertiesByPage((currentSelections) => {
+      const pageSelections = currentSelections[currentPage.id] ?? []
+      const maxSelections = currentPage.propertySelection?.maxSelections ?? Infinity
+
+      if (!pageSelections.includes(property) && pageSelections.length >= maxSelections) {
+        return currentSelections
+      }
+
+      const nextSelections = pageSelections.includes(property)
+        ? pageSelections.filter((item) => item !== property)
+        : [...pageSelections, property]
+
+      return {
+        ...currentSelections,
+        [currentPage.id]: nextSelections,
+      }
+    })
+  }
+
+  return (
+    <HomeRoute
+      page={currentPage}
+      selectedProperties={selectedPropertiesByPage[currentPage.id] ?? []}
+      onToggleProperty={handleToggleProperty}
+      onBack={handleBack}
+      onNext={handleNext}
+    />
+  )
 }
