@@ -11,7 +11,7 @@ export type Principle = {
 }
 
 export type PropertyGroup = {
-  letter: string
+  title?: string
   properties: string[]
 }
 
@@ -26,6 +26,7 @@ export type PropertySelectionPageData = {
   iconSrc: string
   iconAlt: string
   propertyGroups: PropertyGroup[]
+  columns?: 1 | 2 | 3
   theme: PropertySelectionTheme
   maxSelections?: number
   missingPropertiesHint?: string
@@ -97,6 +98,8 @@ export const quizPages: QuizPage[] = [
     question: 'Dina personliga egenskaper',
     previousPageId: 'info',
     previousButtonLabel: 'Tillbaka',
+    nextPageId: 'love',
+    nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad du är bra på',
       subtitle: 'Dina personliga egenskaper',
@@ -109,7 +112,7 @@ export const quizPages: QuizPage[] = [
       maxSelections: 5,
       propertyGroups: [
         {
-          letter: 'A',
+          title: 'A',
           properties: [
             'Allvarlig',
             'Aktsam',
@@ -121,15 +124,15 @@ export const quizPages: QuizPage[] = [
           ],
         },
         {
-          letter: 'B',
+          title: 'B',
           properties: ['Banbrytande', 'Behärskad', 'Beskyddande', 'Bestämd'],
         },
         {
-          letter: 'D',
+          title: 'D',
           properties: ['Diplomatisk', 'Disciplinerad', 'Diskret', 'Driven', 'Dynamisk'],
         },
         {
-          letter: 'E',
+          title: 'E',
           properties: [
             'Effektiv',
             'Eftertänksam',
@@ -142,19 +145,19 @@ export const quizPages: QuizPage[] = [
           ],
         },
         {
-          letter: 'F',
+          title: 'F',
           properties: ['Flexibel', 'Följsam', 'Försiktig'],
         },
         {
-          letter: 'G',
+          title: 'G',
           properties: ['Genomtänkt', 'Glad'],
         },
         {
-          letter: 'I',
+          title: 'I',
           properties: ['Impulsiv', 'Initiativtagande', 'Innovativ', 'Insiktsfull'],
         },
         {
-          letter: 'K',
+          title: 'K',
           properties: [
             'Karismatisk',
             'Klarsynt',
@@ -167,11 +170,11 @@ export const quizPages: QuizPage[] = [
           ],
         },
         {
-          letter: 'L',
+          title: 'L',
           properties: ['Lojal', 'Lugn', 'Lyhörd', 'Lättsam'],
         },
         {
-          letter: 'M',
+          title: 'M',
           properties: [
             'Medmänsklig',
             'Metodisk',
@@ -183,15 +186,15 @@ export const quizPages: QuizPage[] = [
           ],
         },
         {
-          letter: 'N',
+          title: 'N',
           properties: ['Noggrann', 'Nyfiken'],
         },
         {
-          letter: 'O',
+          title: 'O',
           properties: ['Objektiv', 'Omsorgsfull', 'Organiserad'],
         },
         {
-          letter: 'P',
+          title: 'P',
           properties: [
             'Positiv',
             'Praktisk',
@@ -203,11 +206,11 @@ export const quizPages: QuizPage[] = [
           ],
         },
         {
-          letter: 'R',
+          title: 'R',
           properties: ['Rationell', 'Realistisk', 'Resultatinriktad', 'Rolig', 'Rörlig'],
         },
         {
-          letter: 'S',
+          title: 'S',
           properties: [
             'Saklig',
             'Samarbetsvillig',
@@ -222,24 +225,93 @@ export const quizPages: QuizPage[] = [
           ],
         },
         {
-          letter: 'T',
+          title: 'T',
           properties: ['Trovärdig', 'Taktisk', 'Tuff', 'Tålmodig'],
         },
         {
-          letter: 'U',
+          title: 'U',
           properties: ['Uppriktig', 'Uppskattande', 'Uthållig', 'Utåtriktad'],
         },
         {
-          letter: 'V',
+          title: 'V',
           properties: ['Vaksam', 'Vältränad'],
         },
         {
-          letter: 'Ä',
+          title: 'Ä',
           properties: ['Äventyrlig'],
         },
         {
-          letter: 'Ö',
+          title: 'Ö',
           properties: ['Ödmjuk', 'Öppen'],
+        },
+      ],
+    },
+  },
+  {
+    id: 'love',
+    header: 'Vad du älskar',
+    question: 'Dina värderingar',
+    previousPageId: 'strengths',
+    previousButtonLabel: 'Tillbaka',
+    propertySelection: {
+      title: 'Vad du älskar',
+      subtitle: 'Dina värderingar',
+      iconSrc: loveIcon,
+      iconAlt: 'Ikon för vad du älskar',
+      columns: 2,
+      theme: {
+        backgroundColor: '#FFBC8C',
+        activeBackgroundColor: '#FEA45B',
+      },
+      maxSelections: 5,
+      propertyGroups: [
+        {
+          properties: [
+            'Att nå bra resultat.',
+            'Att veta vad jag tycker.',
+            'Att vara med om nya och spännande saker.',
+            'Att få bestämma över mig själv.',
+            'Att vara den som bestämmer.',
+            'Att vara snygg.',
+            'Att ta ansvar för andra.',
+            'Att andra tycker att jag är snygg.',
+            'Att bry mig om andra.',
+            'Att engagera mig för något som är viktigt för mig.',
+            'Att visa medkänsla med andra.',
+            'Att andra kan lita på mig.',
+            'Att göra något bra för världen.',
+            'Att ta ansvar.',
+            'Att visa respekt mot andra.',
+            'Att leva i harmoni med natur och miljö.',
+            'Att ha nya och egna idéer.',
+            'Att vara en bra kompis.',
+            'Att ha en lycklig och kärleksfull familj.',
+            'Att alltid arbeta på att bli bättre.',
+          ],
+        },
+        {
+          properties: [
+            'Att kunna förlåta.',
+            'Att ha bra kompisar.',
+            'Att kunna leka och ha roligt.',
+            'Att ha många kompisar.',
+            'Att ge till andra.',
+            'Att vara frisk och må bra.',
+            'Att vara ärlig och uppriktig.',
+            'Att kunna skratta åt mina egna misstag.',
+            'Att tänka positivt.',
+            'Att vara nöjd med mig själv.',
+            'Att inte ha förutfattade meningar.',
+            'Att ha någon att dela mina hemligheter med.',
+            'Att ha kul på min fritid.',
+            'Att känna mig säker och trygg.',
+            'Att vara populär.',
+            'Att ha självkontroll.',
+            'Att vara fysiskt stark.',
+            'Att ha gott om pengar.',
+            'Att följa traditioner.',
+            'Att arbeta för fred i världen',
+          ],
         },
       ],
     },
