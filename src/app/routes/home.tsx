@@ -28,6 +28,7 @@ export function HomeRoute({
       <div className="w-full max-w-[760px]">
         {page.propertySelection ? (
           <PropertySelectionPage
+            key={page.id}
             page={page.propertySelection}
             selectedProperties={selectedProperties}
             onToggleProperty={onToggleProperty}
@@ -38,6 +39,7 @@ export function HomeRoute({
           />
         ) : page.principles ? (
           <PrinciplesInfo
+            key={page.id}
             header={page.header}
             introduction={page.question}
             principles={page.principles}
@@ -48,6 +50,7 @@ export function HomeRoute({
           />
         ) : (
           <QuizBox
+            key={page.id}
             header={page.header}
             question={page.question}
             illustrationSrc={page.illustrationSrc}

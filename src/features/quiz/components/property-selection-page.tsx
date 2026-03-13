@@ -24,6 +24,8 @@ export function PropertySelectionPage({
   const selectedSet = new Set(selectedProperties)
   const maxSelections = page.maxSelections ?? Infinity
   const hasReachedSelectionLimit = selectedProperties.length >= maxSelections
+  const columnsClassName =
+    page.columns === 1 ? 'grid-cols-1' : page.columns === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'
 
   return (
     <div className="flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] bg-white px-6 pb-8 pt-8 shadow-[0_12px_28px_rgba(0,0,0,0.12)] md:px-10 md:pb-10 md:pt-10">
@@ -46,10 +48,10 @@ export function PropertySelectionPage({
       </div>
 
       <div className="flex-1 overflow-y-auto pr-1">
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className={`grid grid-cols-1 gap-6 ${columnsClassName}`}>
           {page.propertyGroups.map((group) => (
-            <section key={group.letter}>
-              <h2 className="mb-3 text-2xl font-bold">{group.letter}</h2>
+            <section key={group.title ?? group.properties[0]}>
+              {group.title ? <h2 className="mb-3 text-2xl font-bold">{group.title}</h2> : null}
 
               <div className="flex flex-col gap-3">
                 {group.properties.map((property) => {
