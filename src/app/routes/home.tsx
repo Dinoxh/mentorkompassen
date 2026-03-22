@@ -22,20 +22,26 @@ export function HomeRoute({
   onBack,
   onNext,
 }: HomeRouteProps) {
+  const showCompass = page.propertySelection
+
   return (
     <main className="relative min-h-screen bg-[#EFEEE7] px-4 pb-8 pt-20 md:pt-24">
       <a className="mentor-brand" href="https://mentor.se" aria-label="Mentor startsida">
         <img src="/mentor-logo.svg" alt="Mentor" />
       </a>
 
-      <div className="mx-auto flex w-full max-w-[1420px] flex-col gap-6 lg:flex-row lg:items-start lg:justify-center">
-        <CompassSummary
-          sections={compassSections}
-          selectionsByPage={selectionsByPage}
-          currentPageId={page.id}
-        />
+      <div
+        className={`mx-auto flex w-full max-w-[1420px] flex-col gap-6 ${showCompass ? 'lg:flex-row lg:items-start lg:justify-center' : 'items-center justify-center'}`}
+      >
+        {showCompass && (
+          <CompassSummary
+            sections={compassSections}
+            selectionsByPage={selectionsByPage}
+            currentPageId={page.id}
+          />
+        )}
 
-        <div className="w-full max-w-[760px] lg:ml-auto">
+        <div className={`w-full max-w-[760px] ${showCompass ? 'lg:ml-auto' : ''}`}>
           {page.propertySelection ? (
             <PropertySelectionPage
               key={page.id}
