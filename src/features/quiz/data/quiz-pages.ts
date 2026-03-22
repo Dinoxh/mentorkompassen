@@ -66,7 +66,7 @@ export const compassSections: CompassSection[] = [
     iconAlt: 'Ikon för vad du är bra på',
     sourcePageId: 'strengths',
     backgroundColor: '#00B469',
-    activeBackgroundColor: '#00A55D',
+    activeBackgroundColor: '#008C48',
   },
   {
     id: 'love',
@@ -161,7 +161,7 @@ export const quizPages: QuizPage[] = [
       iconAlt: 'Ikon för vad du är bra på',
       theme: {
         backgroundColor: '#00B469',
-        activeBackgroundColor: '#00A55D',
+        activeBackgroundColor: '#008C48',
       },
       maxSelections: 5,
       propertyGroups: [
