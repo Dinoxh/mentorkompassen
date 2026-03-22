@@ -77,6 +77,7 @@ export function AppRouter() {
   return (
     <HomeRoute
       page={currentPage}
+      selectionsByPage={selectedPropertiesByPage}
       selectedProperties={selectedPropertiesByPage[currentPage.id] ?? []}
       onToggleProperty={handleToggleProperty}
       onBack={handleBack}
