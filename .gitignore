@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 project_structure.md
 feature-workflow.md
+.claude

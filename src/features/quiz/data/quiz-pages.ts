@@ -1,4 +1,4 @@
-import strengthsIcon from '@/features/quiz/assets/principles/strengths.png'
+import strengthsIcon from '@/features/quiz/assets/principles/good.png'
 import loveIcon from '@/features/quiz/assets/principles/love.png'
 import workIcon from '@/features/quiz/assets/principles/work.png'
 import worldIcon from '@/features/quiz/assets/principles/world.png'
@@ -32,6 +32,17 @@ export type PropertySelectionPageData = {
   missingPropertiesHint?: string
 }
 
+export type CompassSection = {
+  id: string
+  title: string
+  subtitle: string
+  iconSrc: string
+  iconAlt: string
+  sourcePageId: string
+  backgroundColor: string
+  activeBackgroundColor: string
+}
+
 export type QuizPage = {
   id: string
   header: string
@@ -46,10 +57,53 @@ export type QuizPage = {
   propertySelection?: PropertySelectionPageData
 }
 
+export const compassSections: CompassSection[] = [
+  {
+    id: 'strengths',
+    title: 'Vad du är bra på',
+    subtitle: 'Dina personliga egenskaper',
+    iconSrc: strengthsIcon,
+    iconAlt: 'Ikon för vad du är bra på',
+    sourcePageId: 'strengths',
+    backgroundColor: '#00B469',
+    activeBackgroundColor: '#008C48',
+  },
+  {
+    id: 'love',
+    title: 'Vad du älskar',
+    subtitle: 'Dina värderingar',
+    iconSrc: loveIcon,
+    iconAlt: 'Ikon för vad du älskar',
+    sourcePageId: 'love',
+    backgroundColor: '#FFBC8C',
+    activeBackgroundColor: '#FEA45B',
+  },
+  {
+    id: 'work',
+    title: 'Vad du kan få betalt för',
+    subtitle: 'Din drömarbetsplats',
+    iconSrc: workIcon,
+    iconAlt: 'Ikon för vad du kan få betalt för',
+    sourcePageId: 'work',
+    backgroundColor: '#FFFF5C',
+    activeBackgroundColor: '#FFEB64',
+  },
+  {
+    id: 'world',
+    title: 'Vad världen behöver',
+    subtitle: 'Framtidsspaning',
+    iconSrc: worldIcon,
+    iconAlt: 'Ikon för vad världen behöver',
+    sourcePageId: 'world',
+    backgroundColor: '#AF74FF',
+    activeBackgroundColor: '#9850FE',
+  },
+]
+
 export const quizPages: QuizPage[] = [
   {
     id: 'intro',
-    header: 'Mentor kompassen',
+    header: 'Mentorkompassen',
     question:
       'I Mentor Boost utgår vi från en modell som heter IKIGAI. IKIGAI är japanska och betyder ungefär; anledning att finnas till eller din drivkraft.\n\nHär skapar du din IKIGAI-kompass som ska hjälpa dig att sätta upp mål i ditt liv och när du behöver ta viktiga beslut om studier, jobb, fritid och relationer.',
     nextPageId: 'info',
@@ -107,7 +161,7 @@ export const quizPages: QuizPage[] = [
       iconAlt: 'Ikon för vad du är bra på',
       theme: {
         backgroundColor: '#00B469',
-        activeBackgroundColor: '#00A55D',
+        activeBackgroundColor: '#008C48',
       },
       maxSelections: 5,
       propertyGroups: [
