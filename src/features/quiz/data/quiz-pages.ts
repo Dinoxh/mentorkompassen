@@ -1,4 +1,4 @@
-import strengthsIcon from '@/features/quiz/assets/principles/strengths.png'
+import strengthsIcon from '@/features/quiz/assets/principles/good.png'
 import loveIcon from '@/features/quiz/assets/principles/love.png'
 import workIcon from '@/features/quiz/assets/principles/work.png'
 import worldIcon from '@/features/quiz/assets/principles/world.png'
