@@ -1,3 +1,4 @@
+import compassBg from '@/features/quiz/assets/mentorkompassen_compass_summary.png'
 import type { CompassSection } from '@/features/quiz/data/quiz-pages'
 
 type CompassSummaryProps = {
@@ -6,119 +7,95 @@ type CompassSummaryProps = {
   currentPageId: string
 }
 
+/**
+ * Circle center positions as percentages of the PNG image dimensions (1108 × 1154 px).
+ * Measured visually from mentorkompassen_compass_summary.png.
+ */
+const compassPositionMap: Record<string, { cx: string; cy: string }> = {
+  love: { cx: '50%', cy: '21%' },
+  strengths: { cx: '18%', cy: '49%' },
+  world: { cx: '82%', cy: '49%' },
+  work: { cx: '50%', cy: '77%' },
+}
+
+const MAX_LINES = 5
+
 export function CompassSummary({ sections, selectionsByPage, currentPageId }: CompassSummaryProps) {
-  const currentSection = sections.find((section) => section.sourcePageId === currentPageId)
-
   return (
-    <aside className="w-full max-w-[560px] lg:sticky lg:top-24">
-      <div className="flex h-[720px] max-h-[calc(100vh-2rem)] flex-col overflow-hidden rounded-[56px] bg-white px-6 pb-8 pt-8 shadow-[0_12px_28px_rgba(0,0,0,0.12)] md:px-10 md:pb-10 md:pt-10">
-        <div className="mb-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-black/45">
-            Din kompass
-          </p>
-          <h1 className="mt-2 text-3xl font-bold">Mentorkompassen</h1>
-          <p className="mt-3 max-w-[48ch] text-sm font-medium leading-relaxed text-black/65 md:text-base">
-            Här samlas dina val löpande medan du går igenom quizet.
-          </p>
-        </div>
+    <aside
+      className="relative w-full max-w-[700px] lg:sticky lg:top-24"
+      style={{ aspectRatio: '1108 / 1154' }}
+    >
+      {/* The reference PNG provides the ring, compass star, circle colors, icon watermarks, and labels */}
+      <img
+        src={compassBg}
+        alt="Mentorkompassen"
+        className="absolute inset-0 h-full w-full object-contain"
+        aria-hidden="true"
+      />
 
-        <div className="flex-1 overflow-y-auto pr-1">
-          {currentSection ? (
-            <SingleSectionView
-              section={currentSection}
-              selections={selectionsByPage[currentSection.sourcePageId] ?? []}
-            />
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              {sections.map((section) => {
-                const selections = selectionsByPage[section.sourcePageId] ?? []
-
-                return <SectionCard key={section.id} section={section} selections={selections} />
-              })}
-            </div>
-          )}
-        </div>
-      </div>
+      {/* Transparent overlays positioned over each PNG circle — render selection text on the pre-drawn lines */}
+      {sections.map((section) => {
+        const position = compassPositionMap[section.id]
+        if (!position) return null
+        const selections = selectionsByPage[section.sourcePageId] ?? []
+        const isActive = section.sourcePageId === currentPageId
+        return (
+          <CompassCircleOverlay
+            key={section.id}
+            selections={selections}
+            isActive={isActive}
+            cx={position.cx}
+            cy={position.cy}
+          />
+        )
+      })}
     </aside>
   )
 }
 
-function SingleSectionView({
-  section,
+function CompassCircleOverlay({
   selections,
+  cx,
+  cy,
 }: {
-  section: CompassSection
   selections: string[]
+  isActive: boolean
+  cx: string
+  cy: string
 }) {
+  const lines = Array.from({ length: MAX_LINES }, (_, i) => selections[i] ?? null)
+
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center gap-4">
-        <div
-          className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full"
-          style={{ backgroundColor: section.backgroundColor }}
-        >
-          <img src={section.iconSrc} alt={section.iconAlt} className="h-9 w-9" />
-        </div>
-
-        <div className="min-w-0">
-          <h2 className="text-xl font-bold leading-tight">{section.title}</h2>
-          <p className="mt-0.5 text-base font-medium text-black/60">{section.subtitle}</p>
-        </div>
-      </div>
-
-      <div className="mt-6 flex flex-1 flex-wrap content-start gap-3">
-        {selections.length ? (
-          selections.map((selection) => (
-            <span
-              key={selection}
-              className="rounded-full px-4 py-2 text-base font-semibold text-black"
-              style={{ backgroundColor: section.activeBackgroundColor }}
-            >
-              {selection}
-            </span>
-          ))
-        ) : (
-          <p className="text-base font-medium leading-relaxed text-black/35">Inga val ännu.</p>
-        )}
+    <div
+      className="absolute -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
+      style={{
+        left: cx,
+        top: cy,
+        width: '31%',
+        height: '29.8%',
+      }}
+    >
+      {/* Text lines — positioned to match the pre-drawn PNG lines */}
+      <div
+        className="absolute flex flex-col"
+        style={{
+          left: '20%',
+          top: '20%',
+          width: '60%',
+          height: '58%',
+        }}
+      >
+        {lines.map((text, i) => (
+          <div key={i} className="flex flex-1 items-end">
+            {text && (
+              <span className="truncate text-[clamp(0.55rem,1.1vw,0.8rem)] font-semibold leading-tight text-black/80">
+                {text}
+              </span>
+            )}
+          </div>
+        ))}
       </div>
     </div>
-  )
-}
-
-function SectionCard({ section, selections }: { section: CompassSection; selections: string[] }) {
-  return (
-    <section className="rounded-[34px] border border-black/8 bg-[#f8f6ef] p-4">
-      <div className="flex items-center gap-3">
-        <div
-          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
-          style={{ backgroundColor: section.backgroundColor }}
-        >
-          <img src={section.iconSrc} alt={section.iconAlt} className="h-8 w-8" />
-        </div>
-
-        <div className="min-w-0">
-          <h2 className="text-base font-bold leading-tight md:text-lg">{section.title}</h2>
-          <p className="mt-0.5 text-sm font-medium text-black/60 md:text-base">
-            {section.subtitle}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-4 flex min-h-[128px] flex-wrap content-start gap-2">
-        {selections.length ? (
-          selections.map((selection) => (
-            <span
-              key={selection}
-              className="rounded-full px-3 py-1.5 text-sm font-semibold text-black"
-              style={{ backgroundColor: section.activeBackgroundColor }}
-            >
-              {selection}
-            </span>
-          ))
-        ) : (
-          <p className="text-sm font-medium leading-relaxed text-black/35">Inga val ännu.</p>
-        )}
-      </div>
-    </section>
   )
 }

@@ -64,7 +64,7 @@ export function PropertySelectionPage({
                     },
                     [
                       'w-full border border-black/10 px-4 py-2 text-left text-sm md:text-base',
-                      isSelected ? 'ring-2 ring-black/15' : '',
+                      '',
                       isDisabled
                         ? 'cursor-not-allowed opacity-45 hover:bg-[var(--quiz-button-bg)]'
                         : '',
