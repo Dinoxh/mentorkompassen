@@ -23,6 +23,7 @@ export type PropertySelectionTheme = {
 export type PropertySelectionPageData = {
   title: string
   subtitle: string
+  description?: string
   iconSrc: string
   iconAlt: string
   propertyGroups: PropertyGroup[]
@@ -378,9 +379,12 @@ export const quizPages: QuizPage[] = [
     question: 'Din drömarbetsplats',
     previousPageId: 'love',
     previousButtonLabel: 'Tillbaka',
+    nextPageId: 'world',
+    nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad du kan få betalt för',
       subtitle: 'Din drömarbetsplats',
+      description: 'Försök nu hitta fem yrken som skulle passa dig och din drömarbetsplats.',
       iconSrc: workIcon,
       iconAlt: 'Ikon för vad du kan få betalt för',
       columns: 3,
@@ -652,6 +656,61 @@ export const quizPages: QuizPage[] = [
             'Logistiker',
             'Maskiningenjör',
             'Produktionstekniker',
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: 'world',
+    header: 'Vad världen behöver',
+    question: 'Framtidsspaning',
+    previousPageId: 'work',
+    previousButtonLabel: 'Tillbaka',
+    propertySelection: {
+      title: 'Vad världen behöver',
+      subtitle: 'Framtidsspaning',
+      description: 'Vad skulle du vilja bidra med till världen och på vilket sätt?',
+      iconSrc: worldIcon,
+      iconAlt: 'Ikon för vad världen behöver',
+      columns: 2,
+      theme: {
+        backgroundColor: '#AF74FF',
+        activeBackgroundColor: '#9850FE',
+      },
+      maxSelections: 5,
+      propertyGroups: [
+        {
+          properties: [
+            'Uttrycka sig genom konst',
+            'Se till att utbildningen är rättvis',
+            'Skapa kläder',
+            'Kommunicera väl',
+            'Ta hand om utomhusmiljöer',
+            'Se till att lokalsamhällen förbättras',
+            'Ta foton',
+            'Ta hand om sjuka eller äldre',
+            'Stödja våra framtida generationer',
+            'Erbjuda alla typer av tjänster',
+            'Förmedla positiva nyheter',
+            'Se till att vårt samhälle är rättvist för alla',
+            'Inspirera genom musik',
+          ],
+        },
+        {
+          properties: [
+            'Uppfinna ny teknik',
+            'Dela berättelser',
+            'Använda det vi redan har för att skapa nya saker',
+            'Designa och skapa spel',
+            'Inspirera andra',
+            'Uppmuntra hälsosamt ätande',
+            'Uppfinna nya saker',
+            'Lära andra',
+            'Ta hand om planeten/miljön',
+            'Fatta beslut om samhället',
+            'Laga teknik',
+            'Ta hand om andra',
           ],
         },
       ],
