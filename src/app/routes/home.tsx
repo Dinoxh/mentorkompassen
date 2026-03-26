@@ -22,7 +22,7 @@ export function HomeRoute({
   onBack,
   onNext,
 }: HomeRouteProps) {
-  const showCompass = page.propertySelection
+  const showCompass = page.propertySelection || page.showCompass
 
   return (
     <main className="relative min-h-screen bg-[#EFEEE7] px-4 pb-8 pt-20 md:pt-24">

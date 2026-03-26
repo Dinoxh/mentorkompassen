@@ -54,6 +54,7 @@ export type QuizPage = {
   nextButtonLabel?: string
   illustrationSrc?: string
   illustrationAlt?: string
+  showCompass?: boolean
   principles?: Principle[]
   propertySelection?: PropertySelectionPageData
 }
@@ -667,6 +668,8 @@ export const quizPages: QuizPage[] = [
     question: 'Framtidsspaning',
     previousPageId: 'work',
     previousButtonLabel: 'Tillbaka',
+    nextPageId: 'congrats',
+    nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad världen behöver',
       subtitle: 'Framtidsspaning',
@@ -715,6 +718,18 @@ export const quizPages: QuizPage[] = [
         },
       ],
     },
+  },
+  {
+    id: 'congrats',
+    header: 'Mentorkompassen',
+    question:
+      'Grattis! Du är nu klar med att besvara alla frågor.\n\nDu har identifierat det som är viktigast för dig och är nu ett steg närmare att hitta en väg i livet som stämmer överens med dina passioner och styrkor.\n\nKom ihåg att din IKIGAI är en guide, inte en regelbok. Var inte rädd för att vara flexibel och anpassa dig när du lär dig mer om dig själv och vad du vill ha ut av livet. Fortsätt utforska och agera, så kommer du att hitta din plats i världen.',
+    previousPageId: 'world',
+    previousButtonLabel: 'Tillbaka',
+    nextPageId: 'summary',
+    nextButtonLabel: 'Nästa steg',
+    showCompass: true,
+    illustrationSrc: '',
   },
 ]
 
