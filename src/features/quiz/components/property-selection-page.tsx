@@ -33,6 +33,9 @@ export function PropertySelectionPage({
         <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold md:text-3xl">{page.title}</h1>
           <p className="mt-1 text-lg font-semibold text-black/75 md:text-xl">{page.subtitle}</p>
+          {page.description ? (
+            <p className="mt-1 text-sm text-black/60 md:text-base">{page.description}</p>
+          ) : null}
           {Number.isFinite(maxSelections) ? (
             <p className="mt-2 text-sm font-semibold text-black/55 md:text-base">
               {`${selectedProperties.length}/${maxSelections} valda`}
