@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import compassBg from '@/features/quiz/assets/mentorkompassen_compass_summary.png'
 import type { CompassSection } from '@/features/quiz/data/quiz-pages'
 
@@ -20,9 +21,13 @@ const compassPositionMap: Record<string, { cx: string; cy: string }> = {
 
 const MAX_LINES = 5
 
-export function CompassSummary({ sections, selectionsByPage, currentPageId }: CompassSummaryProps) {
+export const CompassSummary = forwardRef<HTMLElement, CompassSummaryProps>(function CompassSummary(
+  { sections, selectionsByPage, currentPageId },
+  ref
+) {
   return (
     <aside
+      ref={ref}
       className="relative w-full max-w-[700px] lg:sticky lg:top-24"
       style={{ aspectRatio: '1108 / 1154' }}
     >
@@ -52,7 +57,7 @@ export function CompassSummary({ sections, selectionsByPage, currentPageId }: Co
       })}
     </aside>
   )
-}
+})
 
 function CompassCircleOverlay({
   selections,

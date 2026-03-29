@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { toPng } from 'html-to-image'
 import { CompassSummary } from '@/features/quiz/components/compass-summary'
 import { PropertySelectionPage } from '@/features/quiz/components/property-selection-page'
 import { PrinciplesInfo } from '@/features/quiz/components/principles-info'
@@ -61,12 +62,23 @@ export function HomeRoute({
 }: HomeRouteProps) {
   const showCompass = page.propertySelection || page.showCompass
   const [copied, setCopied] = useState(false)
+  const compassRef = useRef<HTMLElement>(null)
 
   const handleCopyPrompt = async () => {
     const prompt = buildPrompt(selectionsByPage)
     await navigator.clipboard.writeText(prompt)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleDownloadImage = () => {
+    if (!compassRef.current) return
+    toPng(compassRef.current, { backgroundColor: '#EFEEE7' }).then((dataUrl) => {
+      const link = document.createElement('a')
+      link.href = dataUrl
+      link.download = 'mentorkompassen-resultat.png'
+      link.click()
+    })
   }
 
   return (
@@ -80,6 +92,7 @@ export function HomeRoute({
       >
         {showCompass && (
           <CompassSummary
+            ref={compassRef}
             sections={compassSections}
             selectionsByPage={selectionsByPage}
             currentPageId={page.id}
@@ -117,19 +130,29 @@ export function HomeRoute({
               illustrationSrc={page.illustrationSrc}
               illustrationAlt={page.illustrationAlt}
             >
-              <div className="flex justify-center gap-3">
-                {page.previousPageId && onBack ? (
-                  <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
-                ) : null}
-                {page.showCopyPrompt ? (
-                  <QuizButton
-                    label={copied ? 'Kopierad!' : 'Kopiera Prompt'}
-                    onClick={handleCopyPrompt}
-                  />
-                ) : page.nextPageId && onNext ? (
-                  <QuizButton label={page.nextButtonLabel ?? 'Nästa'} onClick={onNext} />
-                ) : null}
-              </div>
+              {page.showCopyPrompt ? (
+                <div className="flex flex-col items-center gap-3">
+                  <div className="flex justify-center gap-3">
+                    <QuizButton
+                      label={copied ? 'Kopierad!' : 'Kopiera Prompt'}
+                      onClick={handleCopyPrompt}
+                    />
+                    <QuizButton label="Ladda ned resultatet" onClick={handleDownloadImage} />
+                  </div>
+                  {page.previousPageId && onBack ? (
+                    <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
+                  ) : null}
+                </div>
+              ) : (
+                <div className="flex justify-center gap-3">
+                  {page.previousPageId && onBack ? (
+                    <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
+                  ) : null}
+                  {page.nextPageId && onNext ? (
+                    <QuizButton label={page.nextButtonLabel ?? 'Nästa'} onClick={onNext} />
+                  ) : null}
+                </div>
+              )}
             </QuizBox>
           )}
         </div>
