@@ -55,6 +55,7 @@ export type QuizPage = {
   illustrationSrc?: string
   illustrationAlt?: string
   showCompass?: boolean
+  showCopyPrompt?: boolean
   principles?: Principle[]
   propertySelection?: PropertySelectionPageData
 }
@@ -669,7 +670,7 @@ export const quizPages: QuizPage[] = [
     previousPageId: 'work',
     previousButtonLabel: 'Tillbaka',
     nextPageId: 'congrats',
-    nextButtonLabel: 'Nästa',
+    nextButtonLabel: 'Avsuta quiz',
     propertySelection: {
       title: 'Vad världen behöver',
       subtitle: 'Framtidsspaning',
@@ -723,12 +724,11 @@ export const quizPages: QuizPage[] = [
     id: 'congrats',
     header: 'Mentorkompassen',
     question:
-      'Grattis! Du är nu klar med att besvara alla frågor.\n\nDu har identifierat det som är viktigast för dig och är nu ett steg närmare att hitta en väg i livet som stämmer överens med dina passioner och styrkor.\n\nKom ihåg att din IKIGAI är en guide, inte en regelbok. Var inte rädd för att vara flexibel och anpassa dig när du lär dig mer om dig själv och vad du vill ha ut av livet. Fortsätt utforska och agera, så kommer du att hitta din plats i världen.',
+      'Grattis! Du är nu klar med att besvara alla frågor.\n\nDu har identifierat det som är viktigast för dig och är nu ett steg närmare att hitta en väg i livet som stämmer överens med dina passioner och styrkor.\n\nKom ihåg att din IKIGAI är en guide, inte en regelbok. Var inte rädd för att vara flexibel och anpassa dig när du lär dig mer om dig själv och vad du vill ha ut av livet. Fortsätt utforska och agera, så kommer du att hitta din plats i världen.\n\n Generera en prompt baserat på dina svar och dela den med en AI-chatbot för att få vägledning i ditt nästa steg!\n\n\n Annars kan du trycka på Ladda ned som PDF för att spara en sammanfattning av dina svar och reflektioner.',
     previousPageId: 'world',
     previousButtonLabel: 'Tillbaka',
-    nextPageId: 'summary',
-    nextButtonLabel: 'Nästa steg',
     showCompass: true,
+    showCopyPrompt: true,
     illustrationSrc: '',
   },
 ]
