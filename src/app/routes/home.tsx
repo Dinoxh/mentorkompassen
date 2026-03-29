@@ -1,9 +1,46 @@
+import { useState } from 'react'
 import { CompassSummary } from '@/features/quiz/components/compass-summary'
 import { PropertySelectionPage } from '@/features/quiz/components/property-selection-page'
 import { PrinciplesInfo } from '@/features/quiz/components/principles-info'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
 import { QuizBox } from '@/features/quiz/components/quiz-box'
 import { compassSections, type QuizPage } from '@/features/quiz/data/quiz-pages'
+
+function buildPrompt(selectionsByPage: Record<string, string[]>): string {
+  const categories = [
+    { key: 'strengths', label: 'VAD DU ÄR BRA PÅ (Dina personliga egenskaper)' },
+    { key: 'love', label: 'VAD DU ÄLSKAR (Dina värderingar)' },
+    { key: 'work', label: 'VAD DU KAN FÅ BETALT FÖR (Din drömarbetsplats)' },
+    { key: 'world', label: 'VAD VÄRLDEN BEHÖVER (Framtidsspaning)' },
+  ]
+
+  const categorySections = categories
+    .map(({ key, label }) => {
+      const answers = selectionsByPage[key] ?? []
+      const lines = Array.from({ length: 5 }, (_, i) => `Svar ${i + 1}: ${answers[i] ?? ''}`).join(
+        '\n'
+      )
+      return `${label}\n${lines}`
+    })
+    .join('\n\n')
+
+  return `Du är en karriärcoach och jobbsökningsexpert. Baserat på användarens svar nedan — grundade i Ikigai-modellen — ge personliga jobbförslag, karriärvägar och konkreta råd.
+
+Användaren har svarat på upp till 5 frågor inom varje nyckelområde:
+
+${categorySections}
+
+Om ett svar saknas ska du ignorera den raden och enbart utgå från de svar som faktiskt fyllts i.
+
+Baserat på dessa svar, ge följande:
+
+3–5 konkreta jobbtitlar eller karriärvägar som matchar användarens profil
+Varför varje roll passar — koppla det tydligt till deras specifika svar
+En viktig färdighet eller kompetens att utveckla för den mest rekommenderade karriärvägen
+Ett jobbsökningstips anpassat till deras beskrivning av drömarbetsplatsen
+En framtidssäkrad insikt — hur deras intressen stämmer överens med vart arbetsmarknaden är på väg
+Håll tonen varm, uppmuntrande och praktisk. Svara alltid på svenska.`
+}
 
 type HomeRouteProps = {
   page: QuizPage
@@ -22,7 +59,15 @@ export function HomeRoute({
   onBack,
   onNext,
 }: HomeRouteProps) {
-  const showCompass = page.propertySelection
+  const showCompass = page.propertySelection || page.showCompass
+  const [copied, setCopied] = useState(false)
+
+  const handleCopyPrompt = async () => {
+    const prompt = buildPrompt(selectionsByPage)
+    await navigator.clipboard.writeText(prompt)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <main className="relative min-h-screen bg-[#EFEEE7] px-4 pb-8 pt-20 md:pt-24">
@@ -76,7 +121,12 @@ export function HomeRoute({
                 {page.previousPageId && onBack ? (
                   <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
                 ) : null}
-                {page.nextPageId && onNext ? (
+                {page.showCopyPrompt ? (
+                  <QuizButton
+                    label={copied ? 'Kopierad!' : 'Kopiera Prompt'}
+                    onClick={handleCopyPrompt}
+                  />
+                ) : page.nextPageId && onNext ? (
                   <QuizButton label={page.nextButtonLabel ?? 'Nästa'} onClick={onNext} />
                 ) : null}
               </div>
