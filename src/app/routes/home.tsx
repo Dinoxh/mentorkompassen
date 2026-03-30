@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
 import { CompassSummary } from '@/features/quiz/components/compass-summary'
 import { PropertySelectionPage } from '@/features/quiz/components/property-selection-page'
@@ -6,6 +6,10 @@ import { PrinciplesInfo } from '@/features/quiz/components/principles-info'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
 import { QuizBox } from '@/features/quiz/components/quiz-box'
 import { compassSections, type QuizPage } from '@/features/quiz/data/quiz-pages'
+import { getPageTheme } from '@/features/quiz/data/page-themes'
+import { LavaLamp } from '@/components/lava-lamp'
+import { SiteHeader } from '@/components/site-header'
+import { SiteFooter } from '@/components/site-footer'
 
 function buildPrompt(selectionsByPage: Record<string, string[]>): string {
   const categories = [
@@ -63,6 +67,18 @@ export function HomeRoute({
   const showCompass = page.propertySelection || page.showCompass
   const [copied, setCopied] = useState(false)
   const compassRef = useRef<HTMLElement>(null)
+  const theme = getPageTheme(page.id)
+
+  useEffect(() => {
+    const root = document.documentElement
+    root.style.setProperty('--page-accent', theme.accent)
+    root.style.setProperty('--page-accent-active', theme.accentActive)
+    root.style.setProperty('--page-accent-glow', theme.accentGlow)
+    root.style.setProperty('--page-accent-soft', theme.accentSoft)
+    root.style.setProperty('--lava-1', theme.lavaColors[0])
+    root.style.setProperty('--lava-2', theme.lavaColors[1])
+    root.style.setProperty('--lava-3', theme.lavaColors[2])
+  }, [theme])
 
   const handleCopyPrompt = async () => {
     const prompt = buildPrompt(selectionsByPage)
@@ -82,81 +98,84 @@ export function HomeRoute({
   }
 
   return (
-    <main className="relative min-h-screen bg-[#EFEEE7] px-4 pb-8 pt-20 md:pt-24">
-      <a className="mentor-brand" href="https://mentor.se" aria-label="Mentor startsida">
-        <img src="/mentor-logo.svg" alt="Mentor" />
-      </a>
+    <div className="page-transition flex min-h-screen flex-col bg-[#EFEEE7]">
+      <LavaLamp colors={theme.lavaColors} />
+      <SiteHeader />
 
-      <div
-        className={`mx-auto flex w-full max-w-[1420px] flex-col gap-6 ${showCompass ? 'lg:flex-row lg:items-start lg:justify-center' : 'items-center justify-center'}`}
-      >
-        {showCompass && (
-          <CompassSummary
-            ref={compassRef}
-            sections={compassSections}
-            selectionsByPage={selectionsByPage}
-            currentPageId={page.id}
-          />
-        )}
-
-        <div className={`w-full max-w-[760px] ${showCompass ? 'lg:ml-auto' : ''}`}>
-          {page.propertySelection ? (
-            <PropertySelectionPage
-              key={page.id}
-              page={page.propertySelection}
-              selectedProperties={selectedProperties}
-              onToggleProperty={onToggleProperty}
-              onBack={onBack}
-              onNext={onNext}
-              backButtonLabel={page.previousButtonLabel}
-              nextButtonLabel={page.nextButtonLabel}
+      <main className="relative z-10 flex-1 px-4 pb-8 pt-20 md:pt-24">
+        <div
+          className={`animate-fade-in mx-auto flex w-full max-w-[1420px] flex-col gap-6 ${showCompass ? 'lg:flex-row lg:items-start lg:justify-center' : 'items-center justify-center'}`}
+        >
+          {showCompass && (
+            <CompassSummary
+              ref={compassRef}
+              sections={compassSections}
+              selectionsByPage={selectionsByPage}
+              currentPageId={page.id}
             />
-          ) : page.principles ? (
-            <PrinciplesInfo
-              key={page.id}
-              header={page.header}
-              introduction={page.question}
-              principles={page.principles}
-              onBack={onBack}
-              onNext={onNext}
-              backButtonLabel={page.previousButtonLabel}
-              nextButtonLabel={page.nextButtonLabel}
-            />
-          ) : (
-            <QuizBox
-              key={page.id}
-              header={page.header}
-              question={page.question}
-              illustrationSrc={page.illustrationSrc}
-              illustrationAlt={page.illustrationAlt}
-            >
-              {page.showCopyPrompt ? (
-                <div className="flex flex-col items-center gap-3">
-                  <div className="flex justify-center gap-3">
-                    <QuizButton
-                      label={copied ? 'Kopierad!' : 'Kopiera Prompt'}
-                      onClick={handleCopyPrompt}
-                    />
-                    <QuizButton label="Ladda ned resultatet" onClick={handleDownloadImage} />
-                  </div>
-                  {page.previousPageId && onBack ? (
-                    <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
-                  ) : null}
-                </div>
-              ) : (
-                <div className="flex justify-center gap-3">
-                  {page.previousPageId && onBack ? (
-                    <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
-                  ) : null}
-                  {page.nextPageId && onNext ? (
-                    <QuizButton label={page.nextButtonLabel ?? 'Nästa'} onClick={onNext} />
-                  ) : null}
-                </div>
-              )}
-            </QuizBox>
           )}
+
+          <div className={`w-full max-w-[760px] ${showCompass ? 'lg:ml-auto' : ''}`}>
+            {page.propertySelection ? (
+              <PropertySelectionPage
+                key={page.id}
+                page={page.propertySelection}
+                selectedProperties={selectedProperties}
+                onToggleProperty={onToggleProperty}
+                onBack={onBack}
+                onNext={onNext}
+                backButtonLabel={page.previousButtonLabel}
+                nextButtonLabel={page.nextButtonLabel}
+              />
+            ) : page.principles ? (
+              <PrinciplesInfo
+                key={page.id}
+                header={page.header}
+                introduction={page.question}
+                principles={page.principles}
+                onBack={onBack}
+                onNext={onNext}
+                backButtonLabel={page.previousButtonLabel}
+                nextButtonLabel={page.nextButtonLabel}
+              />
+            ) : (
+              <QuizBox
+                key={page.id}
+                header={page.header}
+                question={page.question}
+                illustrationSrc={page.illustrationSrc}
+                illustrationAlt={page.illustrationAlt}
+              >
+                {page.showCopyPrompt ? (
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="flex justify-center gap-3">
+                      <QuizButton
+                        label={copied ? 'Kopierad!' : 'Kopiera Prompt'}
+                        onClick={handleCopyPrompt}
+                      />
+                      <QuizButton label="Ladda ned resultatet" onClick={handleDownloadImage} />
+                    </div>
+                    {page.previousPageId && onBack ? (
+                      <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className="flex justify-center gap-3">
+                    {page.previousPageId && onBack ? (
+                      <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
+                    ) : null}
+                    {page.nextPageId && onNext ? (
+                      <QuizButton label={page.nextButtonLabel ?? 'Nästa'} onClick={onNext} />
+                    ) : null}
+                  </div>
+                )}
+              </QuizBox>
+            )}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+
+      <SiteFooter />
+    </div>
   )
 }
