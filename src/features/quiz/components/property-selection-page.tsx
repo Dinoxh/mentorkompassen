@@ -50,7 +50,7 @@ export function PropertySelectionPage({
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-1">
+      <div className="quiz-scroll flex-1 overflow-y-auto pr-1">
         <div className={`grid grid-cols-1 gap-6 ${columnsClassName}`}>
           {page.propertyGroups.map((group) => (
             <section key={group.title ?? group.properties[0]}>
