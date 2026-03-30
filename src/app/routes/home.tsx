@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { toPng } from 'html-to-image'
 import { CompassSummary } from '@/features/quiz/components/compass-summary'
 import { PropertySelectionPage } from '@/features/quiz/components/property-selection-page'
 import { PrinciplesInfo } from '@/features/quiz/components/principles-info'
@@ -66,7 +65,7 @@ export function HomeRoute({
 }: HomeRouteProps) {
   const showCompass = page.propertySelection || page.showCompass
   const [copied, setCopied] = useState(false)
-  const compassRef = useRef<HTMLElement>(null)
+  const compassRef = useRef<SVGSVGElement>(null)
   const theme = getPageTheme(page.id)
 
   useEffect(() => {
@@ -88,19 +87,38 @@ export function HomeRoute({
   }
 
   const handleDownloadImage = () => {
-    if (!compassRef.current) return
-    toPng(compassRef.current, { backgroundColor: '#EFEEE7' }).then((dataUrl) => {
+    const svg = compassRef.current
+    if (!svg) return
+
+    const serializer = new XMLSerializer()
+    const svgString = serializer.serializeToString(svg)
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' })
+    const url = URL.createObjectURL(svgBlob)
+
+    const img = new Image()
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      const scale = 2
+      canvas.width = 1200 * scale
+      canvas.height = 1200 * scale
+      const ctx = canvas.getContext('2d')!
+      ctx.fillStyle = '#EFEEE7'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      URL.revokeObjectURL(url)
+
       const link = document.createElement('a')
-      link.href = dataUrl
+      link.href = canvas.toDataURL('image/png')
       link.download = 'mentorkompassen-resultat.png'
       link.click()
-    })
+    }
+    img.src = url
   }
 
   return (
     <div className="page-transition flex min-h-screen flex-col bg-[#EFEEE7]">
       <LavaLamp colors={theme.lavaColors} />
-      <SiteHeader />
+      <SiteHeader brandColor={theme.brandColor} />
 
       <main className="relative z-10 flex-1 px-4 pb-8 pt-20 md:pt-24">
         <div
@@ -175,7 +193,7 @@ export function HomeRoute({
         </div>
       </main>
 
-      <SiteFooter />
+      <SiteFooter brandColor={theme.brandColor} />
     </div>
   )
 }

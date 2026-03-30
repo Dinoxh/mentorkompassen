@@ -44,39 +44,33 @@ body {
   overflow-x: hidden;
 }
 
-/* ─── Custom scrollbar (always visible) ─── */
-* {
+/* ─── Hide site-level scrollbar ─── */
+html {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* Keep scrollbars inside quiz card scroll areas only */
+.quiz-scroll {
   scrollbar-width: thin;
   scrollbar-color: var(--page-accent) transparent;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.quiz-scroll::-webkit-scrollbar {
+  width: 6px;
 }
 
-::-webkit-scrollbar-track {
+.quiz-scroll::-webkit-scrollbar-track {
   background: transparent;
-  border-radius: 999px;
 }
 
-::-webkit-scrollbar-thumb {
+.quiz-scroll::-webkit-scrollbar-thumb {
   background: var(--page-accent);
   border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  transition: background 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--page-accent-active);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-/* Force scrollbar to always show on main containers */
-html {
-  overflow-y: scroll;
 }
 
 /* ─── App shell ─── */
@@ -182,7 +176,7 @@ html {
   background: var(--lava-1);
   top: -10%;
   left: -5%;
-  animation: lava-float-1 20s ease-in-out infinite;
+  animation: lava-float-1 60s ease-in-out infinite;
 }
 
 .lava-blob-2 {
@@ -191,7 +185,7 @@ html {
   background: var(--lava-2);
   top: 40%;
   right: -10%;
-  animation: lava-float-2 25s ease-in-out infinite;
+  animation: lava-float-2 75s ease-in-out infinite;
 }
 
 .lava-blob-3 {
@@ -200,7 +194,7 @@ html {
   background: var(--lava-3);
   bottom: -5%;
   left: 30%;
-  animation: lava-float-3 22s ease-in-out infinite;
+  animation: lava-float-3 68s ease-in-out infinite;
 }
 
 /* ─── Page color transition ─── */
@@ -284,21 +278,7 @@ html {
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* ─── Footer ─── */
-.site-footer {
-  background: var(--color-mentor-dark);
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.site-footer a {
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.site-footer a:hover {
-  color: var(--color-white);
-}
+/* ─── Footer (colors set via inline styles for page theming) ─── */
 
 /* ─── Hover card lift effect ─── */
 .hover-lift {
