@@ -42,7 +42,7 @@ export function SiteHeader({ brandColor = '#00B469' }: SiteHeaderProps) {
           className="flex items-center"
         >
           <svg
-            width="139"
+            width="100"
             height="30"
             viewBox="0 0 139 30"
             fill="none"
