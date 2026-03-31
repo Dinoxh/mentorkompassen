@@ -21,7 +21,7 @@ export function PrinciplesInfo({
   nextButtonLabel = 'Nästa',
 }: PrinciplesInfoProps) {
   return (
-    <div className="flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] bg-white px-6 pb-8 pt-8 shadow-[0_12px_28px_rgba(0,0,0,0.12)] md:px-10 md:pb-10 md:pt-10">
+    <div className="quiz-card  flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
       <div className="mb-6">
         <h1 className="text-2xl font-bold md:text-3xl">{header}</h1>
         <p className="mt-3 max-w-[60ch] whitespace-pre-line text-sm font-semibold leading-snug md:text-base">
@@ -29,13 +29,13 @@ export function PrinciplesInfo({
         </p>
       </div>
 
-      <div className="flex-1 space-y-6 overflow-y-auto pr-1 md:space-y-7">
+      <div className="quiz-scroll flex-1 space-y-6 overflow-y-auto pr-1 md:space-y-7">
         {principles.map((principle) => (
           <section key={principle.title} className="flex items-center gap-4 md:gap-6">
             <img
               src={principle.iconSrc}
               alt={principle.iconAlt}
-              className="h-18 w-18 shrink-0 rounded-full object-cover md:h-22 md:w-22"
+              className="h-18 w-18 shrink-0 rounded-full object-cover shadow-md md:h-22 md:w-22"
             />
 
             <div className="min-w-0">
