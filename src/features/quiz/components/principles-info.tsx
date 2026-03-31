@@ -29,7 +29,7 @@ export function PrinciplesInfo({
         </p>
       </div>
 
-      <div className="quiz-scroll flex-1 space-y-6 overflow-y-auto pr-1 md:space-y-7">
+      <div className="quiz-scroll flex-1 space-y-6 overflow-y-scroll pr-1 md:space-y-7">
         {principles.map((principle) => (
           <section key={principle.title} className="flex items-center gap-4 md:gap-6">
             <img

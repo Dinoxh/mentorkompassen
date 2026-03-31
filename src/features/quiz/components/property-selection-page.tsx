@@ -29,7 +29,7 @@ export function PropertySelectionPage({
 
   return (
     <div className="quiz-card flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
-      <div className="mb-6 flex items-start gap-4">
+      <div className="relative z-10 mb-6 flex items-start gap-4">
         <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold md:text-3xl">{page.title}</h1>
           <p className="mt-1 text-lg font-semibold text-black/75 md:text-xl">{page.subtitle}</p>
@@ -50,7 +50,7 @@ export function PropertySelectionPage({
         />
       </div>
 
-      <div className="quiz-scroll flex-1 overflow-y-auto pr-1">
+      <div className="quiz-scroll relative z-0 flex-1 overflow-y-scroll pr-1 pt-2">
         <div className={`grid grid-cols-1 gap-6 ${columnsClassName}`}>
           {page.propertyGroups.map((group) => (
             <section key={group.title ?? group.properties[0]}>
@@ -102,7 +102,7 @@ export function PropertySelectionPage({
         ) : null}
       </div>
 
-      <div className="mt-8 flex justify-center gap-3">
+      <div className="relative z-10 mt-8 flex justify-center gap-3">
         {onBack ? <QuizButton label={backButtonLabel} onClick={onBack} /> : null}
         {onNext ? <QuizButton label={nextButtonLabel} onClick={onNext} /> : null}
       </div>

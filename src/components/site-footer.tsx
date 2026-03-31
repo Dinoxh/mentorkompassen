@@ -200,7 +200,7 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
                   }}
                 />
                 <button
-                  className="flex items-center gap-1 whitespace-nowrap rounded-full px-5 py-2 text-sm font-bold transition-transform duration-200 hover:scale-105"
+                  className="flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-full border-2 border-[#32373c] px-5 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                   style={{
                     backgroundColor: buttonBg,
                     color: buttonText,
