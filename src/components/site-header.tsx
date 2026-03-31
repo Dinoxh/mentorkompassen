@@ -57,38 +57,18 @@ export function SiteHeader({ brandColor = '#00B469' }: SiteHeaderProps) {
           </svg>
         </a>
 
-        {/* MENY + yellow circle button — right, matching Figma SVG */}
+        {/* MENY circle button — right */}
         <button
           aria-label="Meny"
-          className="relative flex cursor-pointer items-center"
-          style={{ gap: 0 }}
+          className="relative flex h-14 w-14 cursor-pointer items-center justify-center rounded-full md:h-16 md:w-16"
+          style={{
+            backgroundColor: '#FFFF5C',
+            boxShadow: '0 0 14px rgba(0, 0, 0, 0.1)',
+          }}
         >
-          {/* MENY text — large bold black, overlapping the circle */}
-          <span
-            className="relative z-10 text-lg font-extrabold uppercase tracking-wide text-black md:text-[22px]"
-            style={{ marginRight: '-14px' }}
-          >
+          <span className="text-xs font-extrabold uppercase tracking-wider text-black md:text-sm">
             MENY
           </span>
-          {/* Yellow circle with + icon */}
-          <div
-            className="relative flex h-12 w-12 items-center justify-center rounded-full md:h-[54px] md:w-[54px]"
-            style={{
-              backgroundColor: '#FFFF5C',
-              boxShadow: '0 0 14px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M6 0V12" stroke="black" strokeWidth="2" strokeLinecap="round" />
-              <path d="M0 6H12" stroke="black" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </div>
         </button>
       </div>
     </header>
