@@ -21,7 +21,7 @@ export function PrinciplesInfo({
   nextButtonLabel = 'Nästa',
 }: PrinciplesInfoProps) {
   return (
-    <div className="quiz-card  flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
+    <div className="quiz-card animate-card-enter flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
       <div className="mb-6">
         <h1 className="text-2xl font-bold md:text-3xl">{header}</h1>
         <p className="mt-3 max-w-[60ch] whitespace-pre-line text-sm font-semibold leading-snug md:text-base">

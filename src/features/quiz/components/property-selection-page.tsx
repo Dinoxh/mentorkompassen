@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { getFilledQuizButtonProps } from '@/features/quiz/components/quiz-button-classes'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
 import type { PropertySelectionPageData } from '@/features/quiz/data/quiz-pages'
@@ -28,7 +29,7 @@ export function PropertySelectionPage({
     page.columns === 1 ? 'grid-cols-1' : page.columns === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'
 
   return (
-    <div className="quiz-card flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
+    <div className="quiz-card animate-card-enter flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
       <div className="relative z-10 mb-6 flex items-start gap-4">
         <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold md:text-3xl">{page.title}</h1>
@@ -57,7 +58,7 @@ export function PropertySelectionPage({
               {group.title ? <h2 className="mb-3 text-2xl font-bold">{group.title}</h2> : null}
 
               <div className="flex flex-col gap-3">
-                {group.properties.map((property) => {
+                {group.properties.map((property, propIdx) => {
                   const isSelected = selectedSet.has(property)
                   const isDisabled = !isSelected && hasReachedSelectionLimit
                   const buttonProps = getFilledQuizButtonProps(
@@ -66,26 +67,24 @@ export function PropertySelectionPage({
                       activeBackgroundColor: page.theme.activeBackgroundColor,
                     },
                     [
-                      'property-btn w-full px-4 py-2 text-left text-sm md:text-base',
+                      'property-btn w-full px-4 py-2 text-left text-sm md:text-base animate-slide-in',
                       isDisabled
-                        ? 'cursor-not-allowed opacity-45 hover:bg-[var(--quiz-button-bg)]'
+                        ? 'cursor-not-allowed opacity-25 grayscale-[30%] hover:bg-[var(--quiz-button-bg)] hover:translate-y-0 hover:shadow-none'
                         : '',
                     ].join(' '),
                     isSelected
                   )
 
                   return (
-                    <button
+                    <PropertyButton
                       key={property}
-                      type="button"
-                      aria-pressed={isSelected}
-                      disabled={isDisabled}
-                      onClick={() => onToggleProperty(property)}
-                      className={buttonProps.className}
-                      style={buttonProps.style}
-                    >
-                      {property}
-                    </button>
+                      property={property}
+                      isSelected={isSelected}
+                      isDisabled={isDisabled}
+                      buttonProps={buttonProps}
+                      delay={propIdx * 30}
+                      onToggle={onToggleProperty}
+                    />
                   )
                 })}
               </div>
@@ -107,5 +106,48 @@ export function PropertySelectionPage({
         {onNext ? <QuizButton label={nextButtonLabel} onClick={onNext} /> : null}
       </div>
     </div>
+  )
+}
+
+function PropertyButton({
+  property,
+  isSelected,
+  isDisabled,
+  buttonProps,
+  delay,
+  onToggle,
+}: {
+  property: string
+  isSelected: boolean
+  isDisabled: boolean
+  buttonProps: { className: string; style: React.CSSProperties }
+  delay: number
+  onToggle: (property: string) => void
+}) {
+  const ref = useRef<HTMLButtonElement>(null)
+
+  const handleClick = () => {
+    onToggle(property)
+    // Trigger pop animation
+    const el = ref.current
+    if (el) {
+      el.classList.remove('animate-select-pop')
+      void el.offsetWidth // force reflow
+      el.classList.add('animate-select-pop')
+    }
+  }
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      aria-pressed={isSelected}
+      disabled={isDisabled}
+      onClick={handleClick}
+      className={buttonProps.className}
+      style={{ ...buttonProps.style, animationDelay: `${delay}ms` }}
+    >
+      {property}
+    </button>
   )
 }

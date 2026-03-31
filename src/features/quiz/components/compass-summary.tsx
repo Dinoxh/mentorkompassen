@@ -37,7 +37,7 @@ export const CompassSummary = forwardRef<SVGSVGElement, CompassSummaryProps>(
         ref={ref}
         viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`}
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full max-w-[700px] lg:sticky lg:top-24"
+        className="animate-float w-full max-w-[700px] lg:sticky lg:top-24"
         role="img"
         aria-label="Mentorkompassen - dina val"
       >
@@ -93,6 +93,7 @@ export const CompassSummary = forwardRef<SVGSVGElement, CompassSummaryProps>(
           return (
             <CompassCircle
               key={section.id}
+              id={section.id}
               cx={pos.x}
               cy={pos.y}
               r={CIRCLE_R}
@@ -128,6 +129,7 @@ function wrapText(text: string, maxChars: number): string[] {
 }
 
 function CompassCircle({
+  id,
   cx,
   cy,
   r,
@@ -137,6 +139,7 @@ function CompassCircle({
   isActive,
   selections,
 }: {
+  id: string
   cx: number
   cy: number
   r: number
@@ -148,22 +151,50 @@ function CompassCircle({
 }) {
   const hasSelections = selections.length > 0
 
-  // Build all display lines with word wrapping
+  // Available vertical space inside circle (use 75% of diameter for safe margin)
+  const usableHeight = (r - 4) * 2 * 0.75
+
+  // Build all display lines with word wrapping — wider wrap to reduce line count
   const allLines: string[] = []
   if (hasSelections) {
     selections.slice(0, MAX_SELECTIONS).forEach((text) => {
-      const wrapped = wrapText(text, 16)
+      const wrapped = wrapText(text, 18)
       allLines.push(...wrapped)
     })
   }
 
-  // Scale font size and line height based on how many lines we need
+  // Scale font size and line height to fit within circle
   const totalLines = allLines.length
-  const fontSize = totalLines > 8 ? 8.5 : totalLines > 6 ? 9.5 : 11
-  const lineHeight = fontSize + 3
+  const titleHeight = 12
+  const sepCount = Math.max(0, selections.slice(0, MAX_SELECTIONS).length - 1)
+  const sepHeight = 2
+
+  // Calculate font size that fits
+  const availableForLines = usableHeight - titleHeight - sepCount * sepHeight
+  const maxLineHeight = totalLines > 0 ? availableForLines / totalLines : 14
+  const lineHeight = Math.min(maxLineHeight, 13)
+  const fontSize = Math.max(6.5, Math.min(10, lineHeight - 2))
 
   return (
     <g filter={isActive ? 'url(#active-glow)' : 'url(#circle-shadow)'}>
+      {/* Clip path to contain text within circle */}
+      <clipPath id={`clip-${id}`}>
+        <circle cx={cx} cy={cy} r={r - 4} />
+      </clipPath>
+
+      {/* Pulse ring for active circle */}
+      {isActive && (
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke={bgColor} strokeWidth="2" opacity="0">
+          <animate
+            attributeName="r"
+            from={String(r)}
+            to={String(r + 22)}
+            dur="2s"
+            repeatCount="indefinite"
+          />
+          <animate attributeName="opacity" from="0.5" to="0" dur="2s" repeatCount="indefinite" />
+        </circle>
+      )}
       {/* Circle background */}
       <circle
         cx={cx}
@@ -172,11 +203,12 @@ function CompassCircle({
         fill={bgColor}
         stroke={isActive ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.5)'}
         strokeWidth={isActive ? 2.5 : 1.5}
+        style={{ transition: 'fill 0.6s ease, stroke 0.4s ease, stroke-width 0.3s ease' }}
       />
 
       {/* Title + subtitle (shown when no selections) */}
       {!hasSelections && (
-        <>
+        <g clipPath={`url(#clip-${id})`}>
           <text
             x={cx}
             y={cy - 6}
@@ -201,61 +233,96 @@ function CompassCircle({
           >
             {subtitle}
           </text>
-        </>
+        </g>
       )}
 
-      {/* Selections — word-wrapped, full text, centered */}
+      {/* Selections — word-wrapped, full text, clipped to circle */}
       {hasSelections && (
-        <g>
-          {/* Render each selection as a group, separated visually */}
+        <g clipPath={`url(#clip-${id})`}>
           {(() => {
             const items = selections.slice(0, MAX_SELECTIONS)
-            const groups: { lines: string[]; isSeparator: boolean }[] = []
-            items.forEach((text, i) => {
-              if (i > 0) groups.push({ lines: [''], isSeparator: true })
-              groups.push({ lines: wrapText(text, 16), isSeparator: false })
-            })
 
-            // Flatten to get total line count for vertical centering
-            const displayLines: { text: string; bold: boolean }[] = []
-            groups.forEach((g) => {
-              if (g.isSeparator) {
-                displayLines.push({ text: '', bold: false })
-              } else {
-                g.lines.forEach((l) => displayLines.push({ text: l, bold: true }))
+            // Build flat list: each item gets a bullet prefix on its first line
+            const displayItems: { text: string; isFirstLine: boolean }[] = []
+            items.forEach((text, i) => {
+              const wrapped = wrapText(text, 18)
+              wrapped.forEach((line, li) => {
+                displayItems.push({ text: line, isFirstLine: li === 0 })
+              })
+              // Add separator between items (not after last)
+              if (i < items.length - 1) {
+                displayItems.push({ text: '', isFirstLine: false })
               }
             })
 
-            // Use smaller separator gap
-            const sepHeight = 4
-            const blockHeight =
-              displayLines.filter((l) => l.text).length * lineHeight +
-              displayLines.filter((l) => !l.text).length * sepHeight
-            let currentY = cy - blockHeight / 2 + lineHeight / 2
+            const contentHeight =
+              displayItems.filter((l) => l.text).length * lineHeight +
+              displayItems.filter((l) => !l.text).length * sepHeight
+            const totalHeight = titleHeight + contentHeight
+            let currentY = cy - totalHeight / 2
 
-            return displayLines.map((line, i) => {
+            const elements: React.ReactNode[] = []
+
+            // Section title header
+            elements.push(
+              <text
+                key="title"
+                x={cx}
+                y={currentY + titleHeight / 2}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="rgba(0,0,0,0.45)"
+                fontSize={Math.max(7, Math.min(8, fontSize - 1))}
+                fontWeight="700"
+                fontFamily="'Inter', system-ui, sans-serif"
+                letterSpacing="1.2"
+              >
+                {title.toUpperCase()}
+              </text>
+            )
+            currentY += titleHeight
+
+            // Selection items
+            displayItems.forEach((line, i) => {
               if (!line.text) {
                 currentY += sepHeight
-                return null
+                return
               }
-              const y = currentY
+              const y = currentY + lineHeight / 2
               currentY += lineHeight
-              return (
+
+              if (line.isFirstLine) {
+                // Bullet dot
+                elements.push(
+                  <circle
+                    key={`dot-${i}`}
+                    cx={cx - r * 0.55}
+                    cy={y}
+                    r={1.5}
+                    fill="#1a1a1a"
+                    opacity={0.5}
+                  />
+                )
+              }
+
+              elements.push(
                 <text
-                  key={i}
-                  x={cx}
+                  key={`text-${i}`}
+                  x={cx - r * 0.55 + 6}
                   y={y}
-                  textAnchor="middle"
+                  textAnchor="start"
                   dominantBaseline="central"
                   fill="#1a1a1a"
                   fontSize={fontSize}
-                  fontWeight="600"
+                  fontWeight="700"
                   fontFamily="'Inter', system-ui, sans-serif"
                 >
                   {line.text}
                 </text>
               )
             })
+
+            return elements
           })()}
         </g>
       )}
