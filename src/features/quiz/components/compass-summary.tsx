@@ -109,6 +109,24 @@ export const CompassSummary = forwardRef<SVGSVGElement, CompassSummaryProps>(
   }
 )
 
+/** Wrap a string into lines that fit within a max character width */
+function wrapText(text: string, maxChars: number): string[] {
+  const words = text.split(' ')
+  const lines: string[] = []
+  let current = ''
+  for (const word of words) {
+    const test = current ? `${current} ${word}` : word
+    if (test.length > maxChars && current) {
+      lines.push(current)
+      current = word
+    } else {
+      current = test
+    }
+  }
+  if (current) lines.push(current)
+  return lines
+}
+
 function CompassCircle({
   cx,
   cy,
@@ -128,8 +146,21 @@ function CompassCircle({
   isActive: boolean
   selections: string[]
 }) {
-  const lineHeight = 14
   const hasSelections = selections.length > 0
+
+  // Build all display lines with word wrapping
+  const allLines: string[] = []
+  if (hasSelections) {
+    selections.slice(0, MAX_SELECTIONS).forEach((text) => {
+      const wrapped = wrapText(text, 16)
+      allLines.push(...wrapped)
+    })
+  }
+
+  // Scale font size and line height based on how many lines we need
+  const totalLines = allLines.length
+  const fontSize = totalLines > 8 ? 8.5 : totalLines > 6 ? 9.5 : 11
+  const lineHeight = fontSize + 3
 
   return (
     <g filter={isActive ? 'url(#active-glow)' : 'url(#circle-shadow)'}>
@@ -173,29 +204,59 @@ function CompassCircle({
         </>
       )}
 
-      {/* Selections — centered, no lines */}
+      {/* Selections — word-wrapped, full text, centered */}
       {hasSelections && (
         <g>
-          {selections.slice(0, MAX_SELECTIONS).map((text, i) => {
-            const totalItems = Math.min(selections.length, MAX_SELECTIONS)
-            const blockHeight = totalItems * lineHeight
-            const startY = cy - blockHeight / 2 + lineHeight / 2
-            return (
-              <text
-                key={i}
-                x={cx}
-                y={startY + i * lineHeight}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill="#1a1a1a"
-                fontSize="11"
-                fontWeight="600"
-                fontFamily="'Inter', system-ui, sans-serif"
-              >
-                {text.length > 18 ? text.slice(0, 16) + '...' : text}
-              </text>
-            )
-          })}
+          {/* Render each selection as a group, separated visually */}
+          {(() => {
+            const items = selections.slice(0, MAX_SELECTIONS)
+            const groups: { lines: string[]; isSeparator: boolean }[] = []
+            items.forEach((text, i) => {
+              if (i > 0) groups.push({ lines: [''], isSeparator: true })
+              groups.push({ lines: wrapText(text, 16), isSeparator: false })
+            })
+
+            // Flatten to get total line count for vertical centering
+            const displayLines: { text: string; bold: boolean }[] = []
+            groups.forEach((g) => {
+              if (g.isSeparator) {
+                displayLines.push({ text: '', bold: false })
+              } else {
+                g.lines.forEach((l) => displayLines.push({ text: l, bold: true }))
+              }
+            })
+
+            // Use smaller separator gap
+            const sepHeight = 4
+            const blockHeight =
+              displayLines.filter((l) => l.text).length * lineHeight +
+              displayLines.filter((l) => !l.text).length * sepHeight
+            let currentY = cy - blockHeight / 2 + lineHeight / 2
+
+            return displayLines.map((line, i) => {
+              if (!line.text) {
+                currentY += sepHeight
+                return null
+              }
+              const y = currentY
+              currentY += lineHeight
+              return (
+                <text
+                  key={i}
+                  x={cx}
+                  y={y}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fill="#1a1a1a"
+                  fontSize={fontSize}
+                  fontWeight="600"
+                  fontFamily="'Inter', system-ui, sans-serif"
+                >
+                  {line.text}
+                </text>
+              )
+            })
+          })()}
         </g>
       )}
     </g>

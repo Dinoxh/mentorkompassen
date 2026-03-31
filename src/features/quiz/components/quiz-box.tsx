@@ -40,7 +40,7 @@ export function QuizBox({
         {header}
       </h1>
 
-      <div className="quiz-scroll flex-1 overflow-y-auto pr-1">
+      <div className="quiz-scroll flex-1 overflow-y-scroll pr-1">
         {illustrationSrc ? (
           <img
             src={illustrationSrc}
