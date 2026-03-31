@@ -267,15 +267,7 @@ html::-webkit-scrollbar {
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.3s ease;
-}
-
-.site-header.scrolled {
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  background: transparent;
 }
 
 /* ─── Footer (colors set via inline styles for page theming) ─── */
