@@ -60,10 +60,9 @@ export function SiteHeader({ brandColor = '#00B469' }: SiteHeaderProps) {
         {/* MENY circle button — right */}
         <button
           aria-label="Meny"
-          className="relative flex h-14 w-14 cursor-pointer items-center justify-center rounded-full md:h-16 md:w-16"
+          className="meny-btn relative flex h-14 w-14 cursor-pointer items-center justify-center rounded-full md:h-16 md:w-16"
           style={{
             backgroundColor: '#FFFF5C',
-            boxShadow: '0 0 14px rgba(0, 0, 0, 0.1)',
           }}
         >
           <span className="text-xs font-extrabold uppercase tracking-wider text-black md:text-sm">

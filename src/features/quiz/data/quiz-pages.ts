@@ -679,8 +679,8 @@ export const quizPages: QuizPage[] = [
       iconAlt: 'Ikon för vad världen behöver',
       columns: 2,
       theme: {
-        backgroundColor: '#AF74FF',
-        activeBackgroundColor: '#9850FE',
+        backgroundColor: '#B882FF',
+        activeBackgroundColor: '#8B3FE0',
       },
       maxSelections: 5,
       propertyGroups: [

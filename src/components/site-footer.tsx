@@ -22,7 +22,7 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
         viewBox="0 0 1585 250"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="block w-full"
+        className="animate-wave block w-full"
         preserveAspectRatio="none"
         style={{ height: 'clamp(80px, 15vw, 200px)' }}
       >
