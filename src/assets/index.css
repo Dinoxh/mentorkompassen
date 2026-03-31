@@ -54,10 +54,11 @@ html::-webkit-scrollbar {
   display: none;
 }
 
-/* Keep scrollbars inside quiz card scroll areas only */
+/* Keep scrollbars inside quiz card scroll areas — always visible */
 .quiz-scroll {
+  overflow-y: scroll !important;
   scrollbar-width: thin;
-  scrollbar-color: var(--page-accent) transparent;
+  scrollbar-color: var(--page-accent) rgba(0, 0, 0, 0.06);
 }
 
 .quiz-scroll::-webkit-scrollbar {
@@ -65,7 +66,8 @@ html::-webkit-scrollbar {
 }
 
 .quiz-scroll::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
 }
 
 .quiz-scroll::-webkit-scrollbar-thumb {
