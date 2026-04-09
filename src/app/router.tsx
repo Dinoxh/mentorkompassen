@@ -19,6 +19,7 @@ export function AppRouter() {
   const [selectedPropertiesByPage, setSelectedPropertiesByPage] = useState<
     Record<string, string[]>
   >({})
+  const [slideDirection, setSlideDirection] = useState<'forward' | 'back' | null>(null)
 
   useEffect(() => {
     const syncPageWithHash = () => {
@@ -43,6 +44,7 @@ export function AppRouter() {
       return
     }
 
+    setSlideDirection('forward')
     window.location.hash = `/${currentPage.nextPageId}`
   }
 
@@ -51,6 +53,7 @@ export function AppRouter() {
       return
     }
 
+    setSlideDirection('back')
     window.location.hash = `/${currentPage.previousPageId}`
   }
 
@@ -82,6 +85,7 @@ export function AppRouter() {
       onToggleProperty={handleToggleProperty}
       onBack={handleBack}
       onNext={handleNext}
+      slideDirection={slideDirection}
     />
   )
 }

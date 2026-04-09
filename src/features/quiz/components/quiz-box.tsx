@@ -14,13 +14,43 @@ function StylizedText({ text }: { text: string }) {
   const rest = paragraphs.slice(1)
 
   return (
-    <div className="flex flex-col gap-4 px-2 md:px-4">
-      <p className="text-center text-2xl font-extrabold tracking-tight md:text-3xl">{firstLine}</p>
-      {rest.map((p, i) => (
-        <p key={i} className="text-center text-sm leading-relaxed text-neutral-700 md:text-base">
-          {p.trim()}
-        </p>
-      ))}
+    <div className="flex flex-col gap-5 px-2 md:px-6">
+      {/* Headline with shimmer */}
+      <h2
+        className="animate-shimmer-text animate-text-reveal text-center text-3xl font-black tracking-tight md:text-4xl"
+        style={{ animationDelay: '0.1s' }}
+      >
+        {firstLine}
+      </h2>
+
+      {/* Decorative divider */}
+      <div
+        className="animate-line-grow mx-auto h-[2px] w-24 origin-center rounded-full"
+        style={{
+          background: 'linear-gradient(90deg, transparent, var(--page-accent), transparent)',
+          animationDelay: '0.4s',
+        }}
+      />
+
+      {/* Body paragraphs with staggered reveal */}
+      {rest.map((p, i) => {
+        const trimmed = p.trim()
+        const isCallToAction = trimmed.includes('Generera') || trimmed.includes('Annars')
+
+        return (
+          <p
+            key={i}
+            className={`animate-text-reveal text-center leading-relaxed ${
+              isCallToAction
+                ? 'animate-glow-pulse text-sm font-bold text-neutral-800 md:text-base'
+                : 'text-sm font-medium text-neutral-600 md:text-base'
+            }`}
+            style={{ animationDelay: `${0.5 + i * 0.2}s` }}
+          >
+            {trimmed}
+          </p>
+        )
+      })}
     </div>
   )
 }
@@ -35,12 +65,12 @@ export function QuizBox({
   const isFinalPage = !illustrationSrc
 
   return (
-    <div className="quiz-card animate-card-enter relative flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] px-6 pb-8 pt-16 md:px-10 md:pb-10 md:pt-20">
+    <div className="quiz-card relative flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-clip rounded-[56px] px-6 pb-8 pt-16 md:px-10 md:pb-10 md:pt-20">
       <h1 className="absolute left-1/2 top-5 -translate-x-1/2 text-2xl font-bold md:text-3xl">
         {header}
       </h1>
 
-      <div className="quiz-scroll flex-1 overflow-y-scroll pr-1">
+      <div className="quiz-scroll flex-1 overflow-x-hidden overflow-y-scroll pr-1">
         {illustrationSrc ? (
           <img
             src={illustrationSrc}
