@@ -11,7 +11,7 @@ type QuizButtonStyle = CSSProperties & {
 }
 
 export function getQuizButtonClassName(className = '') {
-  return `cursor-pointer rounded-full border-2 border-[#32373c] px-10 py-3 text-lg font-semibold text-[#32373c] transition-all duration-200 bg-[var(--quiz-button-bg)] hover:bg-[var(--quiz-button-hover-bg)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 ${className}`.trim()
+  return `animate-cta-pulse cursor-pointer rounded-full border-2 border-[#32373c] px-10 py-3 text-lg font-semibold text-[#32373c] transition-all duration-200 bg-[var(--quiz-button-bg)] hover:bg-[var(--quiz-button-hover-bg)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 ${className}`.trim()
 }
 
 export function getFilledQuizButtonProps(

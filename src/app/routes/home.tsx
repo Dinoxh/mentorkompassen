@@ -53,6 +53,7 @@ type HomeRouteProps = {
   onToggleProperty: (property: string) => void
   onBack?: () => void
   onNext?: () => void
+  slideDirection?: 'forward' | 'back' | null
 }
 
 export function HomeRoute({
@@ -62,6 +63,7 @@ export function HomeRoute({
   onToggleProperty,
   onBack,
   onNext,
+  slideDirection,
 }: HomeRouteProps) {
   const showCompass = page.propertySelection || page.showCompass
   const [copied, setCopied] = useState(false)
@@ -122,7 +124,7 @@ export function HomeRoute({
 
       <main className="relative z-10 flex-1 px-4 pb-8 pt-20 md:pt-24">
         <div
-          className={`animate-fade-in mx-auto flex w-full max-w-[1420px] flex-col gap-6 ${showCompass ? 'lg:flex-row lg:items-start lg:justify-center' : 'items-center justify-center'}`}
+          className={`mx-auto flex w-full max-w-[1420px] flex-col gap-6 ${showCompass ? 'lg:flex-row lg:items-start lg:justify-center' : 'items-center justify-center'}`}
         >
           {showCompass && (
             <CompassSummary
@@ -133,7 +135,10 @@ export function HomeRoute({
             />
           )}
 
-          <div className={`w-full max-w-[760px] ${showCompass ? 'lg:ml-auto' : ''}`}>
+          <div
+            key={page.id}
+            className={`${slideDirection === 'forward' ? 'animate-slide-right' : slideDirection === 'back' ? 'animate-slide-left' : 'animate-fade-in'} w-full max-w-[760px] ${showCompass ? 'lg:ml-auto' : ''}`}
+          >
             {page.propertySelection ? (
               <PropertySelectionPage
                 key={page.id}
@@ -167,14 +172,23 @@ export function HomeRoute({
                 {page.showCopyPrompt ? (
                   <div className="flex flex-col items-center gap-3">
                     <div className="flex justify-center gap-3">
-                      <QuizButton
-                        label={copied ? 'Kopierad!' : 'Kopiera Prompt'}
-                        onClick={handleCopyPrompt}
-                      />
-                      <QuizButton label="Ladda ned resultatet" onClick={handleDownloadImage} />
+                      <div className="animate-button-pop" style={{ animationDelay: '1.2s' }}>
+                        <QuizButton
+                          label={copied ? 'Kopierad!' : 'Kopiera Prompt'}
+                          onClick={handleCopyPrompt}
+                        />
+                      </div>
+                      <div className="animate-button-pop" style={{ animationDelay: '1.4s' }}>
+                        <QuizButton label="Ladda ned resultatet" onClick={handleDownloadImage} />
+                      </div>
                     </div>
                     {page.previousPageId && onBack ? (
-                      <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
+                      <div className="animate-button-pop" style={{ animationDelay: '1.6s' }}>
+                        <QuizButton
+                          label={page.previousButtonLabel ?? 'Tillbaka'}
+                          onClick={onBack}
+                        />
+                      </div>
                     ) : null}
                   </div>
                 ) : (

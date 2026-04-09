@@ -16,7 +16,7 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
   const hoverLinkColor = '#000000'
 
   return (
-    <footer className="relative mt-auto">
+    <footer className="animate-footer-rise relative mt-auto">
       {/* Curved wave top */}
       <svg
         viewBox="0 0 1585 250"
@@ -44,7 +44,10 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
         <div className="mx-auto max-w-[1420px] px-6 pb-10 pt-4 md:px-10 md:pb-14 md:pt-6">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {/* Column 1: Brand + Contact */}
-            <div className="flex flex-col gap-4">
+            <div
+              className="animate-stagger-up flex flex-col gap-4"
+              style={{ animationDelay: '0.1s' }}
+            >
               {/* Mentor logo — black */}
               <a href="https://mentor.se" aria-label="Mentor Sverige">
                 <svg
@@ -120,7 +123,7 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
             </div>
 
             {/* Column 2: Om oss */}
-            <div>
+            <div className="animate-stagger-up" style={{ animationDelay: '0.2s' }}>
               <h3
                 className="mb-3 text-xs font-bold uppercase tracking-wider"
                 style={{ color: accentColor }}
@@ -153,7 +156,7 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
             </div>
 
             {/* Column 3: Program */}
-            <div>
+            <div className="animate-stagger-up" style={{ animationDelay: '0.3s' }}>
               <h3
                 className="mb-3 text-xs font-bold uppercase tracking-wider"
                 style={{ color: accentColor }}
@@ -179,7 +182,7 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
             </div>
 
             {/* Column 4: Nyhetsbrev */}
-            <div>
+            <div className="animate-stagger-up" style={{ animationDelay: '0.4s' }}>
               <h3
                 className="mb-3 text-xs font-bold uppercase tracking-wider"
                 style={{ color: accentColor }}
@@ -193,7 +196,7 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
                 <input
                   type="email"
                   placeholder="Din e-postadress"
-                  className="flex-1 rounded-full border px-4 py-2 text-sm text-black outline-none placeholder:text-gray-400"
+                  className="footer-input flex-1 rounded-full border px-4 py-2 text-sm text-black outline-none transition-shadow duration-200 placeholder:text-gray-400"
                   style={{
                     borderColor: borderColor,
                     backgroundColor: 'rgba(255,255,255,0.95)',
@@ -328,7 +331,7 @@ function SocialLink({
     <a
       href={href}
       aria-label={label}
-      className="transition-colors duration-200"
+      className="social-pop inline-block transition-colors duration-200"
       style={{ color }}
       onMouseEnter={(e) => (e.currentTarget.style.color = hoverColor)}
       onMouseLeave={(e) => (e.currentTarget.style.color = color)}

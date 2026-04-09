@@ -29,7 +29,7 @@ export function PropertySelectionPage({
     page.columns === 1 ? 'grid-cols-1' : page.columns === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'
 
   return (
-    <div className="quiz-card animate-card-enter flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-hidden rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
+    <div className="quiz-card flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-clip rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
       <div className="relative z-10 mb-6 flex items-start gap-4">
         <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold md:text-3xl">{page.title}</h1>
@@ -39,7 +39,10 @@ export function PropertySelectionPage({
           ) : null}
           {Number.isFinite(maxSelections) ? (
             <p className="mt-2 text-sm font-semibold text-black/55 md:text-base">
-              {`${selectedProperties.length}/${maxSelections} valda`}
+              <span key={selectedProperties.length} className="animate-count-bump inline-block">
+                {selectedProperties.length}
+              </span>
+              {`/${maxSelections} valda`}
             </p>
           ) : null}
         </div>
@@ -47,11 +50,11 @@ export function PropertySelectionPage({
         <img
           src={page.iconSrc}
           alt={page.iconAlt}
-          className="h-18 w-18 shrink-0 rounded-full object-cover shadow-md md:h-22 md:w-22"
+          className="animate-icon-bounce h-18 w-18 shrink-0 rounded-full object-cover shadow-md md:h-22 md:w-22"
         />
       </div>
 
-      <div className="quiz-scroll relative z-0 flex-1 overflow-y-scroll pr-1 pt-2">
+      <div className="quiz-scroll relative z-0 flex-1 overflow-x-hidden overflow-y-scroll pr-1 pt-2">
         <div className={`grid grid-cols-1 gap-6 ${columnsClassName}`}>
           {page.propertyGroups.map((group) => (
             <section key={group.title ?? group.properties[0]}>
