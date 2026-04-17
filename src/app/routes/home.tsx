@@ -120,7 +120,7 @@ export function HomeRoute({
   return (
     <div className="page-transition flex min-h-screen flex-col bg-[#EFEEE7]">
       <LavaLamp colors={theme.lavaColors} />
-      <SiteHeader brandColor={theme.brandColor} />
+      <SiteHeader />
 
       <main className="relative z-10 flex-1 px-4 pb-8 pt-20 md:pt-24">
         <div
