@@ -19,6 +19,7 @@ export function AppRouter() {
   const [selectedPropertiesByPage, setSelectedPropertiesByPage] = useState<
     Record<string, string[]>
   >({})
+  const [personalInfo, setPersonalInfo] = useState({ age: '', location: '' })
   const [slideDirection, setSlideDirection] = useState<'forward' | 'back' | null>(null)
 
   useEffect(() => {
@@ -83,6 +84,8 @@ export function AppRouter() {
       selectionsByPage={selectedPropertiesByPage}
       selectedProperties={selectedPropertiesByPage[currentPage.id] ?? []}
       onToggleProperty={handleToggleProperty}
+      personalInfo={personalInfo}
+      onPersonalInfoChange={setPersonalInfo}
       onBack={handleBack}
       onNext={handleNext}
       slideDirection={slideDirection}

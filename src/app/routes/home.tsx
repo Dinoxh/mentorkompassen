@@ -4,13 +4,17 @@ import { PropertySelectionPage } from '@/features/quiz/components/property-selec
 import { PrinciplesInfo } from '@/features/quiz/components/principles-info'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
 import { QuizBox } from '@/features/quiz/components/quiz-box'
+import { PersonalInfoPage } from '@/features/quiz/components/personal-info-page'
 import { compassSections, type QuizPage } from '@/features/quiz/data/quiz-pages'
 import { getPageTheme } from '@/features/quiz/data/page-themes'
 import { LavaLamp } from '@/components/lava-lamp'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 
-function buildPrompt(selectionsByPage: Record<string, string[]>): string {
+function buildPrompt(
+  selectionsByPage: Record<string, string[]>,
+  personalInfo: { age: string; location: string }
+): string {
   const categories = [
     { key: 'strengths', label: 'VAD DU ÄR BRA PÅ (Dina personliga egenskaper)' },
     { key: 'love', label: 'VAD DU ÄLSKAR (Dina värderingar)' },
@@ -28,8 +32,17 @@ function buildPrompt(selectionsByPage: Record<string, string[]>): string {
     })
     .join('\n\n')
 
-  return `Du är en karriärcoach och jobbsökningsexpert. Baserat på användarens svar nedan — grundade i Ikigai-modellen — ge personliga jobbförslag, karriärvägar och konkreta råd.
+  const personalLines = [
+    personalInfo.age ? `Ålder: ${personalInfo.age} år` : '',
+    personalInfo.location ? `Bor i: ${personalInfo.location}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n')
 
+  const personalSection = personalLines ? `\nOM ANVÄNDAREN\n${personalLines}\n` : ''
+
+  return `Du är en karriärcoach och jobbsökningsexpert. Baserat på användarens svar nedan — grundade i Ikigai-modellen — ge personliga jobbförslag, karriärvägar och konkreta råd.
+${personalSection}
 Användaren har svarat på upp till 5 frågor inom varje nyckelområde:
 
 ${categorySections}
@@ -46,11 +59,15 @@ En framtidssäkrad insikt — hur deras intressen stämmer överens med vart arb
 Håll tonen varm, uppmuntrande och praktisk. Svara alltid på svenska.`
 }
 
+type PersonalInfo = { age: string; location: string }
+
 type HomeRouteProps = {
   page: QuizPage
   selectionsByPage: Record<string, string[]>
   selectedProperties: string[]
   onToggleProperty: (property: string) => void
+  personalInfo: PersonalInfo
+  onPersonalInfoChange: (info: PersonalInfo) => void
   onBack?: () => void
   onNext?: () => void
   slideDirection?: 'forward' | 'back' | null
@@ -61,6 +78,8 @@ export function HomeRoute({
   selectionsByPage,
   selectedProperties,
   onToggleProperty,
+  personalInfo,
+  onPersonalInfoChange,
   onBack,
   onNext,
   slideDirection,
@@ -82,7 +101,7 @@ export function HomeRoute({
   }, [theme])
 
   const handleCopyPrompt = async () => {
-    const prompt = buildPrompt(selectionsByPage)
+    const prompt = buildPrompt(selectionsByPage, personalInfo)
     await navigator.clipboard.writeText(prompt)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -139,7 +158,19 @@ export function HomeRoute({
             key={page.id}
             className={`${slideDirection === 'forward' ? 'animate-slide-right' : slideDirection === 'back' ? 'animate-slide-left' : 'animate-fade-in'} w-full max-w-[760px] ${showCompass ? 'lg:ml-auto' : ''}`}
           >
-            {page.propertySelection ? (
+            {page.personalInfo ? (
+              <PersonalInfoPage
+                key={page.id}
+                age={personalInfo.age}
+                location={personalInfo.location}
+                onAgeChange={(age) => onPersonalInfoChange({ ...personalInfo, age })}
+                onLocationChange={(location) => onPersonalInfoChange({ ...personalInfo, location })}
+                onBack={onBack}
+                onNext={onNext}
+                backButtonLabel={page.previousButtonLabel}
+                nextButtonLabel={page.nextButtonLabel}
+              />
+            ) : page.propertySelection ? (
               <PropertySelectionPage
                 key={page.id}
                 page={page.propertySelection}
@@ -165,6 +196,7 @@ export function HomeRoute({
               <QuizBox
                 key={page.id}
                 header={page.header}
+                subHeader={page.subHeader}
                 question={page.question}
                 illustrationSrc={page.illustrationSrc}
                 illustrationAlt={page.illustrationAlt}

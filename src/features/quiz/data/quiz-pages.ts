@@ -47,7 +47,9 @@ export type CompassSection = {
 export type QuizPage = {
   id: string
   header: string
+  subHeader?: string
   question: string
+  personalInfo?: boolean
   previousPageId?: string
   previousButtonLabel?: string
   nextPageId?: string
@@ -107,16 +109,28 @@ export const quizPages: QuizPage[] = [
   {
     id: 'intro',
     header: 'Mentorkompassen',
+    subHeader: 'Upptäck vad som passar dig',
     question:
-      'I Mentor Boost utgår vi från en modell som heter IKIGAI. IKIGAI är japanska och betyder ungefär; anledning att finnas till eller din drivkraft.\n\nHär skapar du din IKIGAI-kompass som ska hjälpa dig att sätta upp mål i ditt liv och när du behöver ta viktiga beslut om studier, jobb, fritid och relationer.',
+      'I Mentorkompassen får du utforska vad du gillar, vad du är bra på, vad du tycker är viktigt och vilka yrken eller vägar som kan passa dig.\n\nDet finns inga rätt eller fel svar. Välj det som känns mest som du just nu. Du kan alltid tänka om senare.\n\nDu behöver inte bestämma hela framtiden nu. Börja med att upptäcka vad som känns intressant, viktigt och möjligt för dig.\n\nNär du är klar får du en egen kompass som kan hjälpa dig att upptäcka nya möjligheter och börja forma dina framtidsplaner.',
+    nextPageId: 'personal-info',
+    nextButtonLabel: 'Starta kompassen',
+  },
+  {
+    id: 'personal-info',
+    header: 'Om dig',
+    question: 'Berätta lite om dig själv så att vi kan ge dig bättre förslag.',
+    personalInfo: true,
+    previousPageId: 'intro',
+    previousButtonLabel: 'Tillbaka',
     nextPageId: 'info',
     nextButtonLabel: 'Nästa',
   },
   {
     id: 'info',
-    header: 'De fyra principerna',
-    question: 'Här är IKIGAI-kompassens fyra delar och vad de står för.',
-    previousPageId: 'intro',
+    header: 'Fyra delar som hjälper dig att upptäcka vad som passar dig',
+    question:
+      'Mentorkompassen består av fyra delar. Tillsammans hjälper de dig att se mönster i vad du gillar, vad du är bra på och vilka vägar som kan vara intressanta att utforska.',
+    previousPageId: 'personal-info',
     previousButtonLabel: 'Tillbaka',
     nextPageId: 'strengths',
     nextButtonLabel: 'Nästa',
@@ -125,27 +139,31 @@ export const quizPages: QuizPage[] = [
     principles: [
       {
         title: 'Vad du är bra på',
-        description: 'Dina personliga egenskaper',
+        description:
+          'Dina styrkor och egenskaper. Det kan till exempel handla om att du är kreativ, omtänksam, noggrann, modig, driven eller bra på att lösa problem.',
         iconSrc: strengthsIcon,
-        iconAlt: '',
+        iconAlt: 'Ikon för vad du är bra på',
       },
       {
         title: 'Vad du älskar',
-        description: 'Dina värderingar',
+        description:
+          'Det du tycker om, får energi av eller vill ha mer av i livet. Det kan vara att skapa, hjälpa andra, bestämma själv, vara med andra eller lära dig nya saker.',
         iconSrc: loveIcon,
-        iconAlt: '',
+        iconAlt: 'Ikon för vad du älskar',
       },
       {
         title: 'Vad du kan få betalt för',
-        description: 'Din drömarbetsplats',
+        description:
+          'Yrken och områden som kan passa dig. Du behöver inte veta exakt vad du vill bli. Välj sådant som låter spännande, intressant eller värt att veta mer om.',
         iconSrc: workIcon,
-        iconAlt: '',
+        iconAlt: 'Ikon för vad du kan få betalt för',
       },
       {
         title: 'Vad världen behöver',
-        description: 'Framtidsspaning',
+        description:
+          'Det du tycker känns viktigt. Det kan handla om att hjälpa människor, skapa nya idéer, lösa problem, göra saker mer rättvisa eller bidra till en bättre framtid.',
         iconSrc: worldIcon,
-        iconAlt: '',
+        iconAlt: 'Ikon för vad världen behöver',
       },
     ],
   },

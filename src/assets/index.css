@@ -332,6 +332,37 @@ html::-webkit-scrollbar {
   animation: fade-in-up 0.5s ease-out both;
 }
 
+/* ─── Paginated slide transitions ─── */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out both;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.4s ease-out both;
+}
+
 /* ─── Staggered slide-in for property buttons ─── */
 @keyframes slide-in {
   from {
@@ -753,6 +784,8 @@ html::-webkit-scrollbar {
   .animate-wave,
   .animate-slide-right,
   .animate-slide-left,
+  .animate-slide-in-right,
+  .animate-slide-in-left,
   .animate-text-reveal,
   .animate-shimmer-text,
   .animate-glow-pulse,
