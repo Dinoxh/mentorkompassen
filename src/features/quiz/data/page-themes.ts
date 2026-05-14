@@ -95,6 +95,17 @@ const themes: Record<string, PageTheme> = {
   },
 }
 
+// Compass done — green
+themes['compass-done'] = {
+  accent: '#00B469',
+  accentActive: '#00A55D',
+  accentGlow: 'rgba(0, 180, 105, 0.25)',
+  accentSoft: 'rgba(0, 180, 105, 0.08)',
+  brandColor: '#00B469',
+  brandColorDark: '#00A55D',
+  lavaColors: ['rgba(0, 180, 105, 0.16)', 'rgba(175, 116, 255, 0.14)', 'rgba(255, 188, 140, 0.14)'],
+}
+
 // Congrats page — back to green
 themes.congrats = {
   accent: '#00B469',

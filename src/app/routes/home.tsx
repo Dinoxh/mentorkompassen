@@ -5,6 +5,7 @@ import { PrinciplesInfo } from '@/features/quiz/components/principles-info'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
 import { QuizBox } from '@/features/quiz/components/quiz-box'
 import { PersonalInfoPage } from '@/features/quiz/components/personal-info-page'
+import { CompassDonePage } from '@/features/quiz/components/compass-done-page'
 import { compassSections, type QuizPage } from '@/features/quiz/data/quiz-pages'
 import { getPageTheme } from '@/features/quiz/data/page-themes'
 import { LavaLamp } from '@/components/lava-lamp'
@@ -176,6 +177,14 @@ export function HomeRoute({
                 page={page.propertySelection}
                 selectedProperties={selectedProperties}
                 onToggleProperty={onToggleProperty}
+                onBack={onBack}
+                onNext={onNext}
+                backButtonLabel={page.previousButtonLabel}
+                nextButtonLabel={page.nextButtonLabel}
+              />
+            ) : page.id === 'compass-done' ? (
+              <CompassDonePage
+                key={page.id}
                 onBack={onBack}
                 onNext={onNext}
                 backButtonLabel={page.previousButtonLabel}
