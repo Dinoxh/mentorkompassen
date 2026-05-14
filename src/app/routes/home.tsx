@@ -6,6 +6,7 @@ import { QuizButton } from '@/features/quiz/components/quiz-button'
 import { QuizBox } from '@/features/quiz/components/quiz-box'
 import { PersonalInfoPage } from '@/features/quiz/components/personal-info-page'
 import { CompassDonePage } from '@/features/quiz/components/compass-done-page'
+import { FinalPage } from '@/features/quiz/components/final-page'
 import { compassSections, type QuizPage } from '@/features/quiz/data/quiz-pages'
 import { getPageTheme } from '@/features/quiz/data/page-themes'
 import { LavaLamp } from '@/components/lava-lamp'
@@ -14,7 +15,8 @@ import { SiteFooter } from '@/components/site-footer'
 
 function buildPrompt(
   selectionsByPage: Record<string, string[]>,
-  personalInfo: { age: string; location: string }
+  personalInfo: { age: string; location: string },
+  nextStep: string
 ): string {
   const categories = [
     { key: 'strengths', label: 'VAD DU ÄR BRA PÅ (Dina personliga egenskaper)' },
@@ -40,7 +42,9 @@ function buildPrompt(
     .filter(Boolean)
     .join('\n')
 
-  const personalSection = personalLines ? `\nOM ANVÄNDAREN\n${personalLines}\n` : ''
+  const nextStepLine = nextStep.trim() ? `Mitt nästa steg: ${nextStep.trim()}` : ''
+  const allPersonalLines = [...[personalLines], nextStepLine].filter(Boolean).join('\n')
+  const personalSection = allPersonalLines ? `\nOM ANVÄNDAREN\n${allPersonalLines}\n` : ''
 
   return `Du är en karriärcoach och jobbsökningsexpert. Baserat på användarens svar nedan — grundade i Ikigai-modellen — ge personliga jobbförslag, karriärvägar och konkreta råd.
 ${personalSection}
@@ -69,8 +73,11 @@ type HomeRouteProps = {
   onToggleProperty: (property: string) => void
   personalInfo: PersonalInfo
   onPersonalInfoChange: (info: PersonalInfo) => void
+  nextStep: string
+  onNextStepChange: (value: string) => void
   onBack?: () => void
   onNext?: () => void
+  onRestart: () => void
   slideDirection?: 'forward' | 'back' | null
 }
 
@@ -81,8 +88,11 @@ export function HomeRoute({
   onToggleProperty,
   personalInfo,
   onPersonalInfoChange,
+  nextStep,
+  onNextStepChange,
   onBack,
   onNext,
+  onRestart,
   slideDirection,
 }: HomeRouteProps) {
   const showCompass = page.propertySelection || page.showCompass
@@ -102,7 +112,7 @@ export function HomeRoute({
   }, [theme])
 
   const handleCopyPrompt = async () => {
-    const prompt = buildPrompt(selectionsByPage, personalInfo)
+    const prompt = buildPrompt(selectionsByPage, personalInfo, nextStep)
     await navigator.clipboard.writeText(prompt)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -189,6 +199,17 @@ export function HomeRoute({
                 onNext={onNext}
                 backButtonLabel={page.previousButtonLabel}
                 nextButtonLabel={page.nextButtonLabel}
+              />
+            ) : page.id === 'congrats' ? (
+              <FinalPage
+                key={page.id}
+                onCopyPrompt={handleCopyPrompt}
+                onDownloadImage={handleDownloadImage}
+                onRestart={onRestart}
+                onBack={onBack}
+                copied={copied}
+                nextStep={nextStep}
+                onNextStepChange={onNextStepChange}
               />
             ) : page.principles ? (
               <PrinciplesInfo
