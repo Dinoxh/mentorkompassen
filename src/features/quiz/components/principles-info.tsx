@@ -26,7 +26,6 @@ export function PrinciplesInfo({
   onBack,
   onNext,
   backButtonLabel = 'Tillbaka',
-  nextButtonLabel = 'Nästa',
 }: PrinciplesInfoProps) {
   const totalSlides = principles.length + 1
   const [activeSlide, setActiveSlide] = useState(0)
@@ -160,7 +159,7 @@ export function PrinciplesInfo({
       <div className="mt-6 flex justify-center gap-3">
         <QuizButton label={activeSlide === 0 ? backButtonLabel : 'Tillbaka'} onClick={goBackward} />
         <QuizButton
-          label={activeSlide === totalSlides - 1 ? nextButtonLabel : 'Nästa'}
+          label={activeSlide === totalSlides - 1 ? 'Jag är redo' : 'Nästa'}
           onClick={goForward}
         />
       </div>

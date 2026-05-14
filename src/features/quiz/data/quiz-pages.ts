@@ -177,7 +177,9 @@ export const quizPages: QuizPage[] = [
     nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad du är bra på',
-      subtitle: 'Dina personliga egenskaper',
+      subtitle: 'Dina styrkor och egenskaper',
+      description:
+        'Välj fem ord som du tycker passar in på dig.\n\nTänk på hur du är i skolan, hemma, med kompisar eller när du gör något du gillar. Det kan vara saker du själv märker, eller sådant andra brukar säga att du är bra på.\n\nDu behöver inte välja perfekt. Välj det som känns mest som du just nu.',
       iconSrc: strengthsIcon,
       iconAlt: 'Ikon för vad du är bra på',
       theme: {
@@ -332,7 +334,9 @@ export const quizPages: QuizPage[] = [
     nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad du älskar',
-      subtitle: 'Dina värderingar',
+      subtitle: 'Det som känns viktigt eller roligt för dig',
+      description:
+        'Välj fem saker som du gillar, bryr dig om eller vill ha mer av i ditt liv.\n\nDet kan vara sådant som gör dig glad, nyfiken, stolt eller motiverad. Det kan också vara saker du önskar att du fick göra oftare.\n\nHär behöver du inte tänka på jobb, skola eller vad andra tycker. Välj det som känns viktigt för dig.',
       iconSrc: loveIcon,
       iconAlt: 'Ikon för vad du älskar',
       columns: 2,
@@ -403,8 +407,9 @@ export const quizPages: QuizPage[] = [
     nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad du kan få betalt för',
-      subtitle: 'Din drömarbetsplats',
-      description: 'Försök nu hitta fem yrken som skulle passa dig och din drömarbetsplats.',
+      subtitle: 'Yrken och vägar som kan passa dig',
+      description:
+        'Välj fem yrken eller områden som låter intressanta.\n\nDu behöver inte veta exakt vad jobbet innebär eller om du vill jobba med det i framtiden. Välj sådant som gör dig nyfiken eller som du skulle vilja veta mer om.\n\nDet här handlar inte om att bestämma vad du ska bli. Det handlar om att upptäcka möjligheter.',
       iconSrc: workIcon,
       iconAlt: 'Ikon för vad du kan få betalt för',
       columns: 3,
@@ -691,8 +696,9 @@ export const quizPages: QuizPage[] = [
     nextButtonLabel: 'Avsuta quiz',
     propertySelection: {
       title: 'Vad världen behöver',
-      subtitle: 'Framtidsspaning',
-      description: 'Vad skulle du vilja bidra med till världen och på vilket sätt?',
+      subtitle: 'Det du tycker känns viktigt',
+      description:
+        'Välj fem saker som du tycker att världen, människor eller samhället behöver mer av.\n\nDet kan handla om att hjälpa andra, skapa nytt, lösa problem, göra människor tryggare, förbättra miljön eller få fler att må bra.\n\nTänk på vad du skulle vilja vara med och påverka, stort eller smått.',
       iconSrc: worldIcon,
       iconAlt: 'Ikon för vad världen behöver',
       columns: 2,
