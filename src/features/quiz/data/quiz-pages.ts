@@ -20,6 +20,12 @@ export type PropertySelectionTheme = {
   activeBackgroundColor: string
 }
 
+export type HelpText = {
+  intro: string
+  bullets: string[]
+  outro: string
+}
+
 export type PropertySelectionPageData = {
   title: string
   subtitle: string
@@ -31,6 +37,7 @@ export type PropertySelectionPageData = {
   theme: PropertySelectionTheme
   maxSelections?: number
   missingPropertiesHint?: string
+  helpText?: HelpText
 }
 
 export type CompassSection = {
@@ -66,7 +73,7 @@ export const compassSections: CompassSection[] = [
   {
     id: 'strengths',
     title: 'Vad du är bra på',
-    subtitle: 'Dina personliga egenskaper',
+    subtitle: 'Dina styrkor och egenskaper',
     iconSrc: strengthsIcon,
     iconAlt: 'Ikon för vad du är bra på',
     sourcePageId: 'strengths',
@@ -76,7 +83,7 @@ export const compassSections: CompassSection[] = [
   {
     id: 'love',
     title: 'Vad du älskar',
-    subtitle: 'Dina värderingar',
+    subtitle: 'Det som känns viktigt eller roligt för dig',
     iconSrc: loveIcon,
     iconAlt: 'Ikon för vad du älskar',
     sourcePageId: 'love',
@@ -86,7 +93,7 @@ export const compassSections: CompassSection[] = [
   {
     id: 'work',
     title: 'Vad du kan få betalt för',
-    subtitle: 'Din drömarbetsplats',
+    subtitle: 'Yrken och vägar som kan passa dig',
     iconSrc: workIcon,
     iconAlt: 'Ikon för vad du kan få betalt för',
     sourcePageId: 'work',
@@ -96,7 +103,7 @@ export const compassSections: CompassSection[] = [
   {
     id: 'world',
     title: 'Vad världen behöver',
-    subtitle: 'Framtidsspaning',
+    subtitle: 'Det du tycker känns viktigt',
     iconSrc: worldIcon,
     iconAlt: 'Ikon för vad världen behöver',
     sourcePageId: 'world',
@@ -180,6 +187,18 @@ export const quizPages: QuizPage[] = [
       subtitle: 'Dina styrkor och egenskaper',
       description:
         'Välj fem ord som du tycker passar in på dig.\n\nTänk på hur du är i skolan, hemma, med kompisar eller när du gör något du gillar. Det kan vara saker du själv märker, eller sådant andra brukar säga att du är bra på.\n\nDu behöver inte välja perfekt. Välj det som känns mest som du just nu.',
+      helpText: {
+        intro:
+          'Ibland är det svårt att se sina egna styrkor. Tänk på hur du är i skolan, hemma, med kompisar eller när du gör något du gillar.',
+        bullets: [
+          'Vad brukar andra säga att jag är bra på?',
+          'Vad brukar jag hjälpa andra med?',
+          'När känner jag mig trygg eller säker?',
+          'Vad gör jag ofta utan att tänka på det?',
+          'Vilka egenskaper hjälper mig när något blir svårt?',
+        ],
+        outro: 'Välj de ord som känns mest som du just nu.',
+      },
       iconSrc: strengthsIcon,
       iconAlt: 'Ikon för vad du är bra på',
       theme: {
@@ -337,6 +356,18 @@ export const quizPages: QuizPage[] = [
       subtitle: 'Det som känns viktigt eller roligt för dig',
       description:
         'Välj fem saker som du gillar, bryr dig om eller vill ha mer av i ditt liv.\n\nDet kan vara sådant som gör dig glad, nyfiken, stolt eller motiverad. Det kan också vara saker du önskar att du fick göra oftare.\n\nHär behöver du inte tänka på jobb, skola eller vad andra tycker. Välj det som känns viktigt för dig.',
+      helpText: {
+        intro:
+          'Du behöver inte välja det du älskar mest i hela världen. Välj sådant som känns roligt, viktigt eller intressant för dig.',
+        bullets: [
+          'Vad tycker jag om att göra?',
+          'Vad gör mig glad, nyfiken eller motiverad?',
+          'Vad vill jag ha mer av i mitt liv?',
+          'När känns tiden som att den går snabbt?',
+          'Vad skulle jag vilja testa mer av?',
+        ],
+        outro: 'Välj det som känns mest rätt just nu.',
+      },
       iconSrc: loveIcon,
       iconAlt: 'Ikon för vad du älskar',
       columns: 2,
@@ -410,6 +441,18 @@ export const quizPages: QuizPage[] = [
       subtitle: 'Yrken och vägar som kan passa dig',
       description:
         'Välj fem yrken eller områden som låter intressanta.\n\nDu behöver inte veta exakt vad jobbet innebär eller om du vill jobba med det i framtiden. Välj sådant som gör dig nyfiken eller som du skulle vilja veta mer om.\n\nDet här handlar inte om att bestämma vad du ska bli. Det handlar om att upptäcka möjligheter.',
+      helpText: {
+        intro:
+          'Du behöver inte veta vad du vill jobba med i framtiden.\nHär handlar det bara om att välja yrken eller områden som gör dig nyfiken.',
+        bullets: [
+          'Vilket yrke vill jag veta mer om?',
+          'Vilket jobb verkar spännande?',
+          'Vilket område skulle jag kunna tänka mig att testa?',
+          'Finns det något här som passar det jag gillar?',
+          'Finns det något här som passar det jag är bra på?',
+        ],
+        outro: 'Det här är inte ett val för hela livet. Det är bara något att utforska vidare.',
+      },
       iconSrc: workIcon,
       iconAlt: 'Ikon för vad du kan få betalt för',
       columns: 3,
@@ -699,6 +742,18 @@ export const quizPages: QuizPage[] = [
       subtitle: 'Det du tycker känns viktigt',
       description:
         'Välj fem saker som du tycker att världen, människor eller samhället behöver mer av.\n\nDet kan handla om att hjälpa andra, skapa nytt, lösa problem, göra människor tryggare, förbättra miljön eller få fler att må bra.\n\nTänk på vad du skulle vilja vara med och påverka, stort eller smått.',
+      helpText: {
+        intro:
+          'Tänk på vad du tycker känns viktigt i världen, i samhället eller för människor omkring dig.',
+        bullets: [
+          'Vad tycker jag att fler människor borde få?',
+          'Vilka problem skulle jag vilja vara med och lösa?',
+          'Vad gör mig engagerad?',
+          'Hur skulle jag vilja hjälpa andra?',
+          'Vad vill jag bidra till, stort eller smått?',
+        ],
+        outro: 'Välj det som känns viktigt för dig just nu.',
+      },
       iconSrc: worldIcon,
       iconAlt: 'Ikon för vad världen behöver',
       columns: 2,
