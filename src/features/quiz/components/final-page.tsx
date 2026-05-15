@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
 
-type LayoutMode = 'scroll' | 'full' | 'accordion'
+type LayoutMode = 'scroll' | 'full' | 'accordion' | 'paginated'
 
 type FinalPageProps = {
   onCopyPrompt: () => void
@@ -595,10 +595,303 @@ function AccordionLayout({
   )
 }
 
+function PaginatedLayout({
+  onCopyPrompt,
+  onDownloadImage,
+  onRestart,
+  onBack,
+  copied,
+  nextStep,
+  onNextStepChange,
+}: Omit<FinalPageProps, 'layoutMode'>) {
+  const totalSlides = 6
+  const [activeSlide, setActiveSlide] = useState(0)
+  const [slideDir, setSlideDir] = useState<'left' | 'right'>('right')
+  const [focusedField, setFocusedField] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  const goTo = useCallback(
+    (idx: number) => {
+      if (idx === activeSlide) return
+      setSlideDir(idx > activeSlide ? 'right' : 'left')
+      setActiveSlide(idx)
+    },
+    [activeSlide]
+  )
+
+  const goForward = () => {
+    if (activeSlide < totalSlides - 1) {
+      goTo(activeSlide + 1)
+    }
+  }
+
+  const goBackward = () => {
+    if (activeSlide > 0) {
+      goTo(activeSlide - 1)
+    } else {
+      onBack?.()
+    }
+  }
+
+  const handleSaveStep = () => {
+    if (nextStep.trim()) {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    }
+  }
+
+  const slideAnimation = slideDir === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'
+
+  return (
+    <div className="quiz-card relative flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-clip rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
+      <div className="mb-4 flex items-center justify-center gap-2">
+        {Array.from({ length: totalSlides }, (_, i) => (
+          <button
+            key={i}
+            type="button"
+            aria-label={`Gå till sida ${i + 1}`}
+            onClick={() => goTo(i)}
+            className="cursor-pointer transition-all duration-300"
+            style={{
+              width: i === activeSlide ? 28 : 10,
+              height: 10,
+              borderRadius: 5,
+              backgroundColor: i === activeSlide ? 'var(--page-accent)' : 'rgba(0,0,0,0.12)',
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative flex-1 overflow-hidden">
+        {activeSlide === 0 && (
+          <div
+            key="intro"
+            className={`absolute inset-0 flex flex-col items-center justify-center px-4 md:px-12 ${slideAnimation}`}
+          >
+            <h1 className="animate-shimmer-text mb-4 text-center text-2xl font-black tracking-tight md:text-3xl">
+              Vad vill du göra nu?
+            </h1>
+            <div
+              className="animate-line-grow mx-auto mb-6 h-[2px] w-20 origin-center rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, transparent, var(--page-accent), transparent)',
+                animationDelay: '0.2s',
+              }}
+            />
+            <p className="max-w-[50ch] text-center text-sm font-medium leading-relaxed text-neutral-600 md:text-base">
+              Din Mentorkompass är en startpunkt. Välj ett nästa steg som känns mest intressant för
+              dig.
+            </p>
+          </div>
+        )}
+
+        {activeSlide === 1 && (
+          <div
+            key="mentorship"
+            className={`absolute inset-0 flex flex-col items-center justify-center px-4 md:px-12 ${slideAnimation}`}
+          >
+            <h2 className="mb-4 text-center text-2xl font-black tracking-tight md:text-3xl">
+              Jag är nyfiken på mentorskap
+            </h2>
+            <div
+              className="animate-line-grow mx-auto mb-5 h-[2px] w-16 origin-center rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, transparent, var(--page-accent), transparent)',
+                animationDelay: '0.15s',
+              }}
+            />
+            <div className="max-w-[50ch] space-y-3">
+              <p className="text-center text-sm leading-relaxed text-neutral-600 md:text-base">
+                Vill du veta hur det är att prata med någon som jobbar med ett yrke eller område du
+                är nyfiken på?
+              </p>
+              <p className="text-center text-sm leading-relaxed text-neutral-600 md:text-base">
+                Genom mentorskap kan du få höra hur ett jobb fungerar i verkligheten, vilka vägar
+                som kan leda dit och vad du kan testa redan nu.
+              </p>
+              <div className="pt-2">
+                <BulletList
+                  items={mentorshipBullets}
+                  label="Mentorskap kan hjälpa dig att förstå:"
+                />
+              </div>
+              <div className="flex justify-center pt-3">
+                <QuizButton label="Jag är nyfiken på mentorskap" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeSlide === 2 && (
+          <div
+            key="syv"
+            className={`absolute inset-0 flex flex-col items-center justify-center px-4 md:px-12 ${slideAnimation}`}
+          >
+            <h2 className="mb-4 text-center text-2xl font-black tracking-tight md:text-3xl">
+              Jag vill prata med SYV
+            </h2>
+            <div
+              className="animate-line-grow mx-auto mb-5 h-[2px] w-16 origin-center rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, transparent, var(--page-accent), transparent)',
+                animationDelay: '0.15s',
+              }}
+            />
+            <div className="max-w-[50ch] space-y-3">
+              <p className="text-center text-sm leading-relaxed text-neutral-600 md:text-base">
+                SYV betyder studie- och yrkesvägledare. SYV kan hjälpa dig att förstå vilka
+                gymnasieprogram, kurser och utbildningsvägar som passar det du är intresserad av.
+              </p>
+              <p className="text-center text-sm leading-relaxed text-neutral-600 md:text-base">
+                Du kan ta med din Mentorkompass som underlag för samtalet.
+              </p>
+              <div className="pt-2">
+                <BulletList items={syvBullets} label="Frågor du kan ta med till SYV:" />
+              </div>
+              <div className="flex justify-center pt-3">
+                <QuizButton label="Jag vill prata med SYV" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeSlide === 3 && (
+          <div
+            key="ai"
+            className={`absolute inset-0 flex flex-col items-center justify-center px-4 md:px-12 ${slideAnimation}`}
+          >
+            <h2 className="mb-4 text-center text-2xl font-black tracking-tight md:text-3xl">
+              Jag vill få tips med AI
+            </h2>
+            <div
+              className="animate-line-grow mx-auto mb-5 h-[2px] w-16 origin-center rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, transparent, var(--page-accent), transparent)',
+                animationDelay: '0.15s',
+              }}
+            />
+            <div className="max-w-[50ch] space-y-3">
+              <p className="text-center text-sm leading-relaxed text-neutral-600 md:text-base">
+                Du kan använda dina svar för att få fler idéer med hjälp av AI. AI kan hjälpa dig
+                att se mönster i dina svar och ge förslag på yrken, skolämnen, utbildningar eller
+                saker att utforska vidare.
+              </p>
+              <div className="pt-2">
+                <BulletList items={aiBullets} label="AI kan hjälpa dig med:" />
+              </div>
+              <div className="flex justify-center pt-3">
+                <QuizButton
+                  label={copied ? 'Kopierad!' : 'Kopiera AI-prompt'}
+                  onClick={onCopyPrompt}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeSlide === 4 && (
+          <div
+            key="custom"
+            className={`absolute inset-0 flex flex-col items-center justify-center px-4 md:px-12 ${slideAnimation}`}
+          >
+            <h2 className="mb-4 text-center text-2xl font-black tracking-tight md:text-3xl">
+              Jag vill välja ett eget nästa steg
+            </h2>
+            <div
+              className="animate-line-grow mx-auto mb-5 h-[2px] w-16 origin-center rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, transparent, var(--page-accent), transparent)',
+                animationDelay: '0.15s',
+              }}
+            />
+            <div className="w-full max-w-md space-y-3">
+              <p className="text-center text-sm leading-relaxed text-neutral-600 md:text-base">
+                Du kan också välja något litet att göra själv. Det kan vara att läsa mer om ett
+                yrke, prata med någon hemma, fråga en lärare, söka efter en utbildning eller testa
+                något praktiskt.
+              </p>
+              <label
+                htmlFor="next-step-paginated"
+                className={`block text-sm font-bold transition-colors duration-200 ${
+                  focusedField ? 'text-[var(--page-accent-active)]' : 'text-neutral-700'
+                }`}
+              >
+                Mitt nästa steg är:
+              </label>
+              <textarea
+                id="next-step-paginated"
+                placeholder="T.ex. Jag vill ta reda på mer om programmerare."
+                value={nextStep}
+                onChange={(e) => onNextStepChange(e.target.value)}
+                onFocus={() => setFocusedField(true)}
+                onBlur={() => setFocusedField(false)}
+                rows={3}
+                className="w-full resize-none rounded-2xl border-2 border-neutral-200 bg-white/80 px-5 py-4 text-sm font-semibold text-neutral-800 shadow-sm outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-neutral-400 focus:border-[var(--page-accent)] focus:shadow-[0_0_0_4px_var(--page-accent-glow)]"
+              />
+              <div>
+                <p className="mb-2 text-xs font-semibold text-neutral-500">Exempel:</p>
+                <ul className="space-y-1">
+                  {nextStepExamples.slice(0, 4).map((example) => (
+                    <li key={example} className="text-xs leading-relaxed text-neutral-400">
+                      {example}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex justify-center pt-1">
+                <QuizButton
+                  label={saved ? 'Sparat!' : 'Spara mitt nästa steg'}
+                  onClick={handleSaveStep}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeSlide === 5 && (
+          <div
+            key="closing"
+            className={`absolute inset-0 flex flex-col items-center justify-center px-4 md:px-12 ${slideAnimation}`}
+          >
+            <h2 className="animate-shimmer-text mb-4 text-center text-2xl font-black tracking-tight md:text-3xl">
+              Spara ditt resultat
+            </h2>
+            <div
+              className="animate-line-grow mx-auto mb-6 h-[2px] w-20 origin-center rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, transparent, var(--page-accent), transparent)',
+                animationDelay: '0.2s',
+              }}
+            />
+            <p className="mb-8 max-w-[50ch] text-center text-sm font-medium leading-relaxed text-neutral-600 md:text-base">
+              Kom ihåg: du behöver inte veta exakt vad du vill bli. Det viktiga är att börja
+              utforska vad som passar dig och vilka möjligheter som finns.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <QuizButton label="Ladda ned resultatet" onClick={onDownloadImage} />
+              <QuizButton
+                label={copied ? 'Kopierad!' : 'Kopiera AI-prompt'}
+                onClick={onCopyPrompt}
+              />
+              <QuizButton label="Gör om kompassen" onClick={onRestart} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-6 flex justify-center gap-3">
+        <QuizButton label={activeSlide === 0 ? 'Tillbaka' : 'Tillbaka'} onClick={goBackward} />
+        {activeSlide < totalSlides - 1 && <QuizButton label="Nästa" onClick={goForward} />}
+      </div>
+    </div>
+  )
+}
+
 const layoutLabels: Record<LayoutMode, string> = {
   scroll: 'Scroll',
   full: 'Full',
   accordion: 'Accordion',
+  paginated: 'Paginated',
 }
 
 export function FinalPage(props: FinalPageProps) {
@@ -636,6 +929,7 @@ export function FinalPage(props: FinalPageProps) {
       {layoutMode === 'scroll' && <ScrollLayout {...layoutProps} />}
       {layoutMode === 'full' && <FullLayout {...layoutProps} />}
       {layoutMode === 'accordion' && <AccordionLayout {...layoutProps} />}
+      {layoutMode === 'paginated' && <PaginatedLayout {...layoutProps} />}
     </div>
   )
 }
