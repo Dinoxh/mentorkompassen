@@ -736,7 +736,7 @@ export const quizPages: QuizPage[] = [
     previousPageId: 'work',
     previousButtonLabel: 'Tillbaka',
     nextPageId: 'compass-done',
-    nextButtonLabel: 'Avsluta quiz',
+    nextButtonLabel: 'Färdig!',
     propertySelection: {
       title: 'Vad världen behöver',
       subtitle: 'Det du tycker känns viktigt',

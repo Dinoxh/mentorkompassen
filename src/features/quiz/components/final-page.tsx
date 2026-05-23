@@ -159,7 +159,9 @@ export function FinalPage({
             </p>
             <BulletList items={mentorshipBullets} label="Mentorskap kan hjälpa dig att förstå:" />
             <div className="mt-4">
-              <QuizButton label="Jag är nyfiken på mentorskap" />
+              <a href="https://mentor.se/ungdom/" target="_blank" rel="noopener noreferrer">
+                <QuizButton label="Jag är nyfiken på mentorskap" />
+              </a>
             </div>
           </AccordionSection>
 
@@ -267,7 +269,6 @@ export function FinalPage({
           style={{ animationDelay: '0.9s' }}
         >
           <QuizButton label="Ladda ned resultatet" onClick={onDownloadImage} />
-          <QuizButton label={copied ? 'Kopierad!' : 'Kopiera AI-prompt'} onClick={onCopyPrompt} />
           <QuizButton label="Gör om kompassen" onClick={onRestart} />
         </div>
       </div>
