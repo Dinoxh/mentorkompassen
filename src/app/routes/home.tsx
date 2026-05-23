@@ -38,13 +38,12 @@ function buildPrompt(
   const personalLines = [
     personalInfo.age ? `Ålder: ${personalInfo.age} år` : '',
     personalInfo.location ? `Bor i: ${personalInfo.location}` : '',
+    nextStep.trim() ? `Mitt nästa steg: ${nextStep.trim()}` : '',
   ]
     .filter(Boolean)
     .join('\n')
 
-  const nextStepLine = nextStep.trim() ? `Mitt nästa steg: ${nextStep.trim()}` : ''
-  const allPersonalLines = [...[personalLines], nextStepLine].filter(Boolean).join('\n')
-  const personalSection = allPersonalLines ? `\nOM ANVÄNDAREN\n${allPersonalLines}\n` : ''
+  const personalSection = personalLines ? `\nOM ANVÄNDAREN\n${personalLines}\n` : ''
 
   return `Du är en karriärcoach och jobbsökningsexpert. Baserat på användarens svar nedan — grundade i Ikigai-modellen — ge personliga jobbförslag, karriärvägar och konkreta råd.
 ${personalSection}
