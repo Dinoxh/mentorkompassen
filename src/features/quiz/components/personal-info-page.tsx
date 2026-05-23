@@ -108,8 +108,8 @@ export function PersonalInfoPage({
       </div>
 
       <div className="mt-5 flex justify-center gap-3 md:mt-6">
-        {onBack && <QuizButton label={backButtonLabel} onClick={onBack} />}
-        {onNext && <QuizButton label={nextButtonLabel} onClick={onNext} />}
+        {onBack && <QuizButton label={backButtonLabel} onClick={onBack} direction="back" />}
+        {onNext && <QuizButton label={nextButtonLabel} onClick={onNext} direction="forward" />}
       </div>
     </div>
   )

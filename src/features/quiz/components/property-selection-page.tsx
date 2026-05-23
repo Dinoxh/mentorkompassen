@@ -109,8 +109,10 @@ export function PropertySelectionPage({
       </div>
 
       <div className="relative z-10 mt-8 flex justify-center gap-3">
-        {onBack ? <QuizButton label={backButtonLabel} onClick={onBack} /> : null}
-        {onNext ? <QuizButton label={nextButtonLabel} onClick={onNext} /> : null}
+        {onBack ? <QuizButton label={backButtonLabel} onClick={onBack} direction="back" /> : null}
+        {onNext ? (
+          <QuizButton label={nextButtonLabel} onClick={onNext} direction="forward" />
+        ) : null}
       </div>
     </div>
   )
