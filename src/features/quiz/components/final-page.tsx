@@ -177,9 +177,9 @@ export function FinalPage({
               Du kan ta med din Mentorkompass som underlag för samtalet.
             </p>
             <BulletList items={syvBullets} label="Frågor du kan ta med till SYV:" />
-            <div className="mt-4">
-              <QuizButton label="Jag vill prata med SYV" />
-            </div>
+            <p className="mt-4 text-m font-bold text-neutral-700">
+              Ta med ditt resultat till mötet med din SYV
+            </p>
           </AccordionSection>
 
           <AccordionSection

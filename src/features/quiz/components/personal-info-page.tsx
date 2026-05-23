@@ -64,16 +64,22 @@ export function PersonalInfoPage({
               id="age"
               type="number"
               inputMode="numeric"
-              min="1"
-              max="99"
+              min="12"
+              max="23"
               step="1"
               placeholder="T.ex. 16"
               value={age}
-              onChange={(e) => onAgeChange(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value
+                if (val === '' || (Number(val) >= 1 && Number(val) <= 23)) {
+                  onAgeChange(val)
+                }
+              }}
               onFocus={() => setFocusedField('age')}
               onBlur={() => setFocusedField(null)}
               className="w-full rounded-2xl border-2 border-neutral-200 bg-white/80 px-5 py-4 text-base font-semibold text-neutral-800 shadow-sm outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-neutral-400 focus:border-[var(--page-accent)] focus:shadow-[0_0_0_4px_var(--page-accent-glow)]"
             />
+            <p className="mt-1 text-xs text-neutral-400">12–23 år</p>
           </div>
 
           <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
