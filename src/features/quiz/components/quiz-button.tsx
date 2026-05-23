@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { getFilledQuizButtonProps } from '@/features/quiz/components/quiz-button-classes'
 
 type QuizButtonProps = {
@@ -6,6 +7,7 @@ type QuizButtonProps = {
   type?: 'button' | 'submit' | 'reset'
   className?: string
   direction?: 'forward' | 'back' | 'none'
+  icon?: ReactNode
 }
 
 function ArrowIcon({ direction }: { direction: 'forward' | 'back' }) {
@@ -35,6 +37,7 @@ export function QuizButton({
   type = 'button',
   className = '',
   direction = 'none',
+  icon,
 }: QuizButtonProps) {
   const buttonProps = getFilledQuizButtonProps(
     {
@@ -44,7 +47,7 @@ export function QuizButton({
     className
   )
 
-  if (direction === 'none') {
+  if (direction === 'none' && !icon) {
     return (
       <button
         type={type}
@@ -53,6 +56,26 @@ export function QuizButton({
         style={buttonProps.style}
       >
         {label}
+      </button>
+    )
+  }
+
+  const useVertical = direction === 'none' && !!icon
+
+  if (useVertical) {
+    return (
+      <button
+        type={type}
+        onClick={onClick}
+        className={`${buttonProps.className} mentor-nav-button group relative overflow-hidden`}
+        style={buttonProps.style}
+      >
+        <span className="mentor-nav-button__label inline-block transition-transform duration-[450ms] ease-[cubic-bezier(0.46,0.7,0,1.1)] delay-[130ms] group-hover:-translate-y-[200%]">
+          {label}
+        </span>
+        <span className="mentor-nav-button__icon absolute inset-0 flex items-center justify-center translate-y-[200%] transition-transform duration-[450ms] ease-[cubic-bezier(0.46,0.7,0,1.1)] delay-[130ms] group-hover:translate-y-0">
+          {icon}
+        </span>
       </button>
     )
   }
@@ -80,7 +103,7 @@ export function QuizButton({
             : '-translate-x-[200%] group-hover:translate-x-0'
         }`}
       >
-        <ArrowIcon direction={direction} />
+        {icon ?? <ArrowIcon direction={direction} />}
       </span>
     </button>
   )

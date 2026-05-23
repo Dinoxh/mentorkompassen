@@ -70,6 +70,41 @@ function ChatGPTIcon({ className }: { className?: string }) {
   )
 }
 
+function DownloadIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M12 3v13m0 0l-5-5m5 5l5-5M4 20h16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function RestartIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M4.5 12a7.5 7.5 0 0113.07-5.05L20 9.5M19.5 12a7.5 7.5 0 01-13.07 5.05L4 14.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M20 4v5.5h-5.5M4 20v-5.5h5.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 const aiServices = [
   { name: 'Claude', icon: ClaudeIcon, url: 'https://claude.ai', bg: '#D97757' },
   { name: 'Gemini', icon: GeminiIcon, url: 'https://gemini.google.com', bg: '#FFFFFF' },
@@ -359,8 +394,12 @@ export function FinalPage({
           className="animate-fade-in mt-6 flex flex-wrap justify-center gap-3"
           style={{ animationDelay: '0.9s' }}
         >
-          <QuizButton label="Ladda ned resultatet" onClick={onDownloadImage} />
-          <QuizButton label="Gör om kompassen" onClick={onRestart} />
+          <QuizButton
+            label="Ladda ned resultatet"
+            onClick={onDownloadImage}
+            icon={<DownloadIcon />}
+          />
+          <QuizButton label="Gör om kompassen" onClick={onRestart} icon={<RestartIcon />} />
         </div>
       </div>
 
