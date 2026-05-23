@@ -2,6 +2,7 @@ import mentorPrinciplesPng from '@/features/quiz/assets/Mentor 4 principles.png'
 
 type QuizBoxProps = {
   header: string
+  subHeader?: string
   question: string
   illustrationSrc?: string
   illustrationAlt?: string
@@ -57,25 +58,34 @@ function StylizedText({ text }: { text: string }) {
 
 export function QuizBox({
   header,
+  subHeader,
   question,
   illustrationSrc = mentorPrinciplesPng,
   illustrationAlt = 'Mentor 4 principles',
   children,
 }: QuizBoxProps) {
   const isFinalPage = !illustrationSrc
+  const hasSubHeader = !!subHeader
 
   return (
     <div className="quiz-card relative flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-clip rounded-[56px] px-6 pb-8 pt-16 md:px-10 md:pb-10 md:pt-20">
-      <h1 className="absolute left-1/2 top-5 -translate-x-1/2 text-2xl font-bold md:text-3xl">
-        {header}
-      </h1>
+      <div
+        className={`absolute left-1/2 top-5 -translate-x-1/2 text-center ${hasSubHeader ? 'space-y-1' : ''}`}
+      >
+        <h1 className="text-2xl font-bold md:text-3xl">{header}</h1>
+        {hasSubHeader && (
+          <p className="text-sm font-medium text-neutral-500 md:text-base">{subHeader}</p>
+        )}
+      </div>
 
-      <div className="quiz-scroll flex-1 overflow-x-hidden overflow-y-scroll pr-1">
+      <div
+        className={`flex-1 overflow-x-hidden pr-1 ${hasSubHeader ? 'mt-4 overflow-y-hidden' : 'quiz-scroll overflow-y-scroll'}`}
+      >
         {illustrationSrc ? (
           <img
             src={illustrationSrc}
             alt={illustrationAlt}
-            className="mx-auto mb-4 w-[62%] md:mb-5 md:w-[54%]"
+            className={`mx-auto mb-4 md:mb-5 ${hasSubHeader ? 'w-[42%] md:w-[36%]' : 'w-[62%] md:w-[54%]'}`}
           />
         ) : null}
 

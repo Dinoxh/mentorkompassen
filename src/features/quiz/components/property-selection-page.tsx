@@ -1,7 +1,7 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { getFilledQuizButtonProps } from '@/features/quiz/components/quiz-button-classes'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
-import type { PropertySelectionPageData } from '@/features/quiz/data/quiz-pages'
+import type { HelpText, PropertySelectionPageData } from '@/features/quiz/data/quiz-pages'
 
 type PropertySelectionPageProps = {
   page: PropertySelectionPageData
@@ -30,31 +30,35 @@ export function PropertySelectionPage({
 
   return (
     <div className="quiz-card flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-clip rounded-[56px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
-      <div className="relative z-10 mb-6 flex items-start gap-4">
-        <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-bold md:text-3xl">{page.title}</h1>
-          <p className="mt-1 text-lg font-semibold text-black/75 md:text-xl">{page.subtitle}</p>
-          {page.description ? (
-            <p className="mt-1 text-sm text-black/60 md:text-base">{page.description}</p>
-          ) : null}
-          {Number.isFinite(maxSelections) ? (
-            <p className="mt-2 text-sm font-semibold text-black/55 md:text-base">
-              <span key={selectedProperties.length} className="animate-count-bump inline-block">
-                {selectedProperties.length}
-              </span>
-              {`/${maxSelections} valda`}
-            </p>
-          ) : null}
+      <div className="quiz-scroll flex-1 overflow-x-hidden overflow-y-scroll pr-1">
+        <div className="mb-6 flex items-start gap-4">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-2xl font-bold md:text-3xl">{page.title}</h1>
+            <p className="mt-1 text-lg font-semibold text-black/75 md:text-xl">{page.subtitle}</p>
+            {page.description ? (
+              <p className="mt-1 whitespace-pre-line text-sm text-black/60 md:text-base">
+                {page.description}
+              </p>
+            ) : null}
+            {Number.isFinite(maxSelections) ? (
+              <p className="mt-2 text-sm font-semibold text-black/55 md:text-base">
+                <span key={selectedProperties.length} className="animate-count-bump inline-block">
+                  {selectedProperties.length}
+                </span>
+                {`/${maxSelections} valda`}
+              </p>
+            ) : null}
+          </div>
+
+          <img
+            src={page.iconSrc}
+            alt={page.iconAlt}
+            className="animate-icon-bounce h-18 w-18 shrink-0 rounded-full object-cover shadow-md md:h-22 md:w-22"
+          />
         </div>
 
-        <img
-          src={page.iconSrc}
-          alt={page.iconAlt}
-          className="animate-icon-bounce h-18 w-18 shrink-0 rounded-full object-cover shadow-md md:h-22 md:w-22"
-        />
-      </div>
+        {page.helpText ? <HelpPanel helpText={page.helpText} /> : null}
 
-      <div className="quiz-scroll relative z-0 flex-1 overflow-x-hidden overflow-y-scroll pr-1 pt-2">
         <div className={`grid grid-cols-1 gap-6 ${columnsClassName}`}>
           {page.propertyGroups.map((group) => (
             <section key={group.title ?? group.properties[0]}>
@@ -112,6 +116,56 @@ export function PropertySelectionPage({
   )
 }
 
+function HelpPanel({ helpText }: { helpText: HelpText }) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div className="relative z-10 mb-4">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer text-sm font-bold text-[var(--page-accent-active)] transition-colors duration-200 hover:underline md:text-base"
+      >
+        Svårt att välja?
+      </button>
+
+      <div
+        className="overflow-hidden transition-all duration-400 ease-in-out"
+        style={{
+          maxHeight: isOpen ? 400 : 0,
+          opacity: isOpen ? 1 : 0,
+        }}
+      >
+        <div className="mt-3 rounded-3xl border border-black/10 bg-white/60 px-5 py-4 backdrop-blur-sm">
+          <p className="whitespace-pre-line text-sm font-medium leading-relaxed text-neutral-700">
+            {helpText.intro}
+          </p>
+
+          <p className="mb-1 mt-3 text-sm font-bold text-neutral-700">Du kan fundera på:</p>
+          <ul className="space-y-1 pl-1">
+            {helpText.bullets.map((bullet) => (
+              <li key={bullet} className="flex items-start gap-2 text-sm text-neutral-600">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--page-accent)]" />
+                {bullet}
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-3 text-sm font-semibold text-neutral-700">{helpText.outro}</p>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            className="mt-3 cursor-pointer text-sm font-bold text-[var(--page-accent-active)] transition-colors duration-200 hover:underline"
+          >
+            Jag fortsätter välja
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function PropertyButton({
   property,
   isSelected,
@@ -131,11 +185,10 @@ function PropertyButton({
 
   const handleClick = () => {
     onToggle(property)
-    // Trigger pop animation
     const el = ref.current
     if (el) {
       el.classList.remove('animate-select-pop')
-      void el.offsetWidth // force reflow
+      void el.offsetWidth
       el.classList.add('animate-select-pop')
     }
   }

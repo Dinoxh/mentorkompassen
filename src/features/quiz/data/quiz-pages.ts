@@ -20,6 +20,12 @@ export type PropertySelectionTheme = {
   activeBackgroundColor: string
 }
 
+export type HelpText = {
+  intro: string
+  bullets: string[]
+  outro: string
+}
+
 export type PropertySelectionPageData = {
   title: string
   subtitle: string
@@ -31,6 +37,7 @@ export type PropertySelectionPageData = {
   theme: PropertySelectionTheme
   maxSelections?: number
   missingPropertiesHint?: string
+  helpText?: HelpText
 }
 
 export type CompassSection = {
@@ -47,7 +54,9 @@ export type CompassSection = {
 export type QuizPage = {
   id: string
   header: string
+  subHeader?: string
   question: string
+  personalInfo?: boolean
   previousPageId?: string
   previousButtonLabel?: string
   nextPageId?: string
@@ -64,7 +73,7 @@ export const compassSections: CompassSection[] = [
   {
     id: 'strengths',
     title: 'Vad du är bra på',
-    subtitle: 'Dina personliga egenskaper',
+    subtitle: 'Dina styrkor och egenskaper',
     iconSrc: strengthsIcon,
     iconAlt: 'Ikon för vad du är bra på',
     sourcePageId: 'strengths',
@@ -74,7 +83,7 @@ export const compassSections: CompassSection[] = [
   {
     id: 'love',
     title: 'Vad du älskar',
-    subtitle: 'Dina värderingar',
+    subtitle: 'Det som känns viktigt eller roligt för dig',
     iconSrc: loveIcon,
     iconAlt: 'Ikon för vad du älskar',
     sourcePageId: 'love',
@@ -84,7 +93,7 @@ export const compassSections: CompassSection[] = [
   {
     id: 'work',
     title: 'Vad du kan få betalt för',
-    subtitle: 'Din drömarbetsplats',
+    subtitle: 'Yrken och vägar som kan passa dig',
     iconSrc: workIcon,
     iconAlt: 'Ikon för vad du kan få betalt för',
     sourcePageId: 'work',
@@ -94,7 +103,7 @@ export const compassSections: CompassSection[] = [
   {
     id: 'world',
     title: 'Vad världen behöver',
-    subtitle: 'Framtidsspaning',
+    subtitle: 'Det du tycker känns viktigt',
     iconSrc: worldIcon,
     iconAlt: 'Ikon för vad världen behöver',
     sourcePageId: 'world',
@@ -107,16 +116,28 @@ export const quizPages: QuizPage[] = [
   {
     id: 'intro',
     header: 'Mentorkompassen',
+    subHeader: 'Upptäck vad som passar dig',
     question:
-      'I Mentor Boost utgår vi från en modell som heter IKIGAI. IKIGAI är japanska och betyder ungefär; anledning att finnas till eller din drivkraft.\n\nHär skapar du din IKIGAI-kompass som ska hjälpa dig att sätta upp mål i ditt liv och när du behöver ta viktiga beslut om studier, jobb, fritid och relationer.',
+      'I Mentorkompassen får du utforska vad du gillar, vad du är bra på, vad du tycker är viktigt och vilka yrken eller vägar som kan passa dig.\n\nDet finns inga rätt eller fel svar. Välj det som känns mest som du just nu. Du kan alltid tänka om senare.\n\nDu behöver inte bestämma hela framtiden nu. Börja med att upptäcka vad som känns intressant, viktigt och möjligt för dig.\n\nNär du är klar får du en egen kompass som kan hjälpa dig att upptäcka nya möjligheter och börja forma dina framtidsplaner.',
+    nextPageId: 'personal-info',
+    nextButtonLabel: 'Starta kompassen',
+  },
+  {
+    id: 'personal-info',
+    header: 'Om dig',
+    question: 'Berätta lite om dig själv så att vi kan ge dig bättre förslag.',
+    personalInfo: true,
+    previousPageId: 'intro',
+    previousButtonLabel: 'Tillbaka',
     nextPageId: 'info',
     nextButtonLabel: 'Nästa',
   },
   {
     id: 'info',
-    header: 'De fyra principerna',
-    question: 'Här är IKIGAI-kompassens fyra delar och vad de står för.',
-    previousPageId: 'intro',
+    header: 'Fyra delar som hjälper dig att upptäcka vad som passar dig',
+    question:
+      'Mentorkompassen består av fyra delar. Tillsammans hjälper de dig att se mönster i vad du gillar, vad du är bra på och vilka vägar som kan vara intressanta att utforska.',
+    previousPageId: 'personal-info',
     previousButtonLabel: 'Tillbaka',
     nextPageId: 'strengths',
     nextButtonLabel: 'Nästa',
@@ -125,27 +146,31 @@ export const quizPages: QuizPage[] = [
     principles: [
       {
         title: 'Vad du är bra på',
-        description: 'Dina personliga egenskaper',
+        description:
+          'Dina styrkor och egenskaper. Det kan till exempel handla om att du är kreativ, omtänksam, noggrann, modig, driven eller bra på att lösa problem.',
         iconSrc: strengthsIcon,
-        iconAlt: '',
+        iconAlt: 'Ikon för vad du är bra på',
       },
       {
         title: 'Vad du älskar',
-        description: 'Dina värderingar',
+        description:
+          'Det du tycker om, får energi av eller vill ha mer av i livet. Det kan vara att skapa, hjälpa andra, bestämma själv, vara med andra eller lära dig nya saker.',
         iconSrc: loveIcon,
-        iconAlt: '',
+        iconAlt: 'Ikon för vad du älskar',
       },
       {
         title: 'Vad du kan få betalt för',
-        description: 'Din drömarbetsplats',
+        description:
+          'Yrken och områden som kan passa dig. Du behöver inte veta exakt vad du vill bli. Välj sådant som låter spännande, intressant eller värt att veta mer om.',
         iconSrc: workIcon,
-        iconAlt: '',
+        iconAlt: 'Ikon för vad du kan få betalt för',
       },
       {
         title: 'Vad världen behöver',
-        description: 'Framtidsspaning',
+        description:
+          'Det du tycker känns viktigt. Det kan handla om att hjälpa människor, skapa nya idéer, lösa problem, göra saker mer rättvisa eller bidra till en bättre framtid.',
         iconSrc: worldIcon,
-        iconAlt: '',
+        iconAlt: 'Ikon för vad världen behöver',
       },
     ],
   },
@@ -159,7 +184,21 @@ export const quizPages: QuizPage[] = [
     nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad du är bra på',
-      subtitle: 'Dina personliga egenskaper',
+      subtitle: 'Dina styrkor och egenskaper',
+      description:
+        'Välj fem ord som du tycker passar in på dig.\n\nTänk på hur du är i skolan, hemma, med kompisar eller när du gör något du gillar. Det kan vara saker du själv märker, eller sådant andra brukar säga att du är bra på.\n\nDu behöver inte välja perfekt. Välj det som känns mest som du just nu.',
+      helpText: {
+        intro:
+          'Ibland är det svårt att se sina egna styrkor. Tänk på hur du är i skolan, hemma, med kompisar eller när du gör något du gillar.',
+        bullets: [
+          'Vad brukar andra säga att jag är bra på?',
+          'Vad brukar jag hjälpa andra med?',
+          'När känner jag mig trygg eller säker?',
+          'Vad gör jag ofta utan att tänka på det?',
+          'Vilka egenskaper hjälper mig när något blir svårt?',
+        ],
+        outro: 'Välj de ord som känns mest som du just nu.',
+      },
       iconSrc: strengthsIcon,
       iconAlt: 'Ikon för vad du är bra på',
       theme: {
@@ -314,7 +353,21 @@ export const quizPages: QuizPage[] = [
     nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad du älskar',
-      subtitle: 'Dina värderingar',
+      subtitle: 'Det som känns viktigt eller roligt för dig',
+      description:
+        'Välj fem saker som du gillar, bryr dig om eller vill ha mer av i ditt liv.\n\nDet kan vara sådant som gör dig glad, nyfiken, stolt eller motiverad. Det kan också vara saker du önskar att du fick göra oftare.\n\nHär behöver du inte tänka på jobb, skola eller vad andra tycker. Välj det som känns viktigt för dig.',
+      helpText: {
+        intro:
+          'Du behöver inte välja det du älskar mest i hela världen. Välj sådant som känns roligt, viktigt eller intressant för dig.',
+        bullets: [
+          'Vad tycker jag om att göra?',
+          'Vad gör mig glad, nyfiken eller motiverad?',
+          'Vad vill jag ha mer av i mitt liv?',
+          'När känns tiden som att den går snabbt?',
+          'Vad skulle jag vilja testa mer av?',
+        ],
+        outro: 'Välj det som känns mest rätt just nu.',
+      },
       iconSrc: loveIcon,
       iconAlt: 'Ikon för vad du älskar',
       columns: 2,
@@ -385,8 +438,21 @@ export const quizPages: QuizPage[] = [
     nextButtonLabel: 'Nästa',
     propertySelection: {
       title: 'Vad du kan få betalt för',
-      subtitle: 'Din drömarbetsplats',
-      description: 'Försök nu hitta fem yrken som skulle passa dig och din drömarbetsplats.',
+      subtitle: 'Yrken och vägar som kan passa dig',
+      description:
+        'Välj fem yrken eller områden som låter intressanta.\n\nDu behöver inte veta exakt vad jobbet innebär eller om du vill jobba med det i framtiden. Välj sådant som gör dig nyfiken eller som du skulle vilja veta mer om.\n\nDet här handlar inte om att bestämma vad du ska bli. Det handlar om att upptäcka möjligheter.',
+      helpText: {
+        intro:
+          'Du behöver inte veta vad du vill jobba med i framtiden.\nHär handlar det bara om att välja yrken eller områden som gör dig nyfiken.',
+        bullets: [
+          'Vilket yrke vill jag veta mer om?',
+          'Vilket jobb verkar spännande?',
+          'Vilket område skulle jag kunna tänka mig att testa?',
+          'Finns det något här som passar det jag gillar?',
+          'Finns det något här som passar det jag är bra på?',
+        ],
+        outro: 'Det här är inte ett val för hela livet. Det är bara något att utforska vidare.',
+      },
       iconSrc: workIcon,
       iconAlt: 'Ikon för vad du kan få betalt för',
       columns: 3,
@@ -669,12 +735,25 @@ export const quizPages: QuizPage[] = [
     question: 'Framtidsspaning',
     previousPageId: 'work',
     previousButtonLabel: 'Tillbaka',
-    nextPageId: 'congrats',
-    nextButtonLabel: 'Avsuta quiz',
+    nextPageId: 'compass-done',
+    nextButtonLabel: 'Färdig!',
     propertySelection: {
       title: 'Vad världen behöver',
-      subtitle: 'Framtidsspaning',
-      description: 'Vad skulle du vilja bidra med till världen och på vilket sätt?',
+      subtitle: 'Det du tycker känns viktigt',
+      description:
+        'Välj fem saker som du tycker att världen, människor eller samhället behöver mer av.\n\nDet kan handla om att hjälpa andra, skapa nytt, lösa problem, göra människor tryggare, förbättra miljön eller få fler att må bra.\n\nTänk på vad du skulle vilja vara med och påverka, stort eller smått.',
+      helpText: {
+        intro:
+          'Tänk på vad du tycker känns viktigt i världen, i samhället eller för människor omkring dig.',
+        bullets: [
+          'Vad tycker jag att fler människor borde få?',
+          'Vilka problem skulle jag vilja vara med och lösa?',
+          'Vad gör mig engagerad?',
+          'Hur skulle jag vilja hjälpa andra?',
+          'Vad vill jag bidra till, stort eller smått?',
+        ],
+        outro: 'Välj det som känns viktigt för dig just nu.',
+      },
       iconSrc: worldIcon,
       iconAlt: 'Ikon för vad världen behöver',
       columns: 2,
@@ -721,11 +800,21 @@ export const quizPages: QuizPage[] = [
     },
   },
   {
+    id: 'compass-done',
+    header: 'Din Mentorkompass är klar',
+    question: '',
+    showCompass: true,
+    previousPageId: 'world',
+    previousButtonLabel: 'Tillbaka',
+    nextPageId: 'congrats',
+    nextButtonLabel: 'Nästa',
+  },
+  {
     id: 'congrats',
     header: 'Mentorkompassen',
     question:
       'Grattis! Du är nu klar med att besvara alla frågor.\n\nDu har identifierat det som är viktigast för dig och är nu ett steg närmare att hitta en väg i livet som stämmer överens med dina passioner och styrkor.\n\nKom ihåg att din IKIGAI är en guide, inte en regelbok. Var inte rädd för att vara flexibel och anpassa dig när du lär dig mer om dig själv och vad du vill ha ut av livet. Fortsätt utforska och agera, så kommer du att hitta din plats i världen.\n\n Generera en prompt baserat på dina svar och dela den med en AI-chatbot för att få vägledning i ditt nästa steg!\n\n\n Annars kan du trycka på Ladda ned resultatet för att spara en sammanfattning av dina svar och reflektioner.',
-    previousPageId: 'world',
+    previousPageId: 'compass-done',
     previousButtonLabel: 'Tillbaka',
     showCompass: true,
     showCopyPrompt: true,

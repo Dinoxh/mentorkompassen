@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { HomeRoute } from '@/app/routes/home'
-import { getDefaultQuizPage, getQuizPage } from '@/features/quiz/data/quiz-pages'
+import { getDefaultQuizPage, getQuizPage, quizPages } from '@/features/quiz/data/quiz-pages'
 
 function getPageIdFromHash(hash: string) {
   return hash.replace(/^#\/?/, '')
@@ -19,6 +19,8 @@ export function AppRouter() {
   const [selectedPropertiesByPage, setSelectedPropertiesByPage] = useState<
     Record<string, string[]>
   >({})
+  const [personalInfo, setPersonalInfo] = useState({ age: '', location: '' })
+  const [nextStep, setNextStep] = useState('')
   const [slideDirection, setSlideDirection] = useState<'forward' | 'back' | null>(null)
 
   useEffect(() => {
@@ -57,6 +59,12 @@ export function AppRouter() {
     window.location.hash = `/${currentPage.previousPageId}`
   }
 
+  const handleRestart = () => {
+    const firstSelectionPage = quizPages.find((p) => p.propertySelection)
+    setSlideDirection('forward')
+    window.location.hash = `/${firstSelectionPage?.id ?? quizPages[0].id}`
+  }
+
   const handleToggleProperty = (property: string) => {
     setSelectedPropertiesByPage((currentSelections) => {
       const pageSelections = currentSelections[currentPage.id] ?? []
@@ -83,8 +91,13 @@ export function AppRouter() {
       selectionsByPage={selectedPropertiesByPage}
       selectedProperties={selectedPropertiesByPage[currentPage.id] ?? []}
       onToggleProperty={handleToggleProperty}
+      personalInfo={personalInfo}
+      onPersonalInfoChange={setPersonalInfo}
+      nextStep={nextStep}
+      onNextStepChange={setNextStep}
       onBack={handleBack}
       onNext={handleNext}
+      onRestart={handleRestart}
       slideDirection={slideDirection}
     />
   )

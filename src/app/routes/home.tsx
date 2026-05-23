@@ -4,13 +4,20 @@ import { PropertySelectionPage } from '@/features/quiz/components/property-selec
 import { PrinciplesInfo } from '@/features/quiz/components/principles-info'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
 import { QuizBox } from '@/features/quiz/components/quiz-box'
+import { PersonalInfoPage } from '@/features/quiz/components/personal-info-page'
+import { CompassDonePage } from '@/features/quiz/components/compass-done-page'
+import { FinalPage } from '@/features/quiz/components/final-page'
 import { compassSections, type QuizPage } from '@/features/quiz/data/quiz-pages'
 import { getPageTheme } from '@/features/quiz/data/page-themes'
 import { LavaLamp } from '@/components/lava-lamp'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 
-function buildPrompt(selectionsByPage: Record<string, string[]>): string {
+function buildPrompt(
+  selectionsByPage: Record<string, string[]>,
+  personalInfo: { age: string; location: string },
+  nextStep: string
+): string {
   const categories = [
     { key: 'strengths', label: 'VAD DU ÄR BRA PÅ (Dina personliga egenskaper)' },
     { key: 'love', label: 'VAD DU ÄLSKAR (Dina värderingar)' },
@@ -28,8 +35,18 @@ function buildPrompt(selectionsByPage: Record<string, string[]>): string {
     })
     .join('\n\n')
 
-  return `Du är en karriärcoach och jobbsökningsexpert. Baserat på användarens svar nedan — grundade i Ikigai-modellen — ge personliga jobbförslag, karriärvägar och konkreta råd.
+  const personalLines = [
+    personalInfo.age ? `Ålder: ${personalInfo.age} år` : '',
+    personalInfo.location ? `Bor i: ${personalInfo.location}` : '',
+    nextStep.trim() ? `Mitt nästa steg: ${nextStep.trim()}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n')
 
+  const personalSection = personalLines ? `\nOM ANVÄNDAREN\n${personalLines}\n` : ''
+
+  return `Du är en karriärcoach och jobbsökningsexpert. Baserat på användarens svar nedan — grundade i Ikigai-modellen — ge personliga jobbförslag, karriärvägar och konkreta råd.
+${personalSection}
 Användaren har svarat på upp till 5 frågor inom varje nyckelområde:
 
 ${categorySections}
@@ -46,13 +63,20 @@ En framtidssäkrad insikt — hur deras intressen stämmer överens med vart arb
 Håll tonen varm, uppmuntrande och praktisk. Svara alltid på svenska.`
 }
 
+type PersonalInfo = { age: string; location: string }
+
 type HomeRouteProps = {
   page: QuizPage
   selectionsByPage: Record<string, string[]>
   selectedProperties: string[]
   onToggleProperty: (property: string) => void
+  personalInfo: PersonalInfo
+  onPersonalInfoChange: (info: PersonalInfo) => void
+  nextStep: string
+  onNextStepChange: (value: string) => void
   onBack?: () => void
   onNext?: () => void
+  onRestart: () => void
   slideDirection?: 'forward' | 'back' | null
 }
 
@@ -61,8 +85,13 @@ export function HomeRoute({
   selectionsByPage,
   selectedProperties,
   onToggleProperty,
+  personalInfo,
+  onPersonalInfoChange,
+  nextStep,
+  onNextStepChange,
   onBack,
   onNext,
+  onRestart,
   slideDirection,
 }: HomeRouteProps) {
   const showCompass = page.propertySelection || page.showCompass
@@ -82,7 +111,7 @@ export function HomeRoute({
   }, [theme])
 
   const handleCopyPrompt = async () => {
-    const prompt = buildPrompt(selectionsByPage)
+    const prompt = buildPrompt(selectionsByPage, personalInfo, nextStep)
     await navigator.clipboard.writeText(prompt)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -139,7 +168,19 @@ export function HomeRoute({
             key={page.id}
             className={`${slideDirection === 'forward' ? 'animate-slide-right' : slideDirection === 'back' ? 'animate-slide-left' : 'animate-fade-in'} w-full max-w-[760px] ${showCompass ? 'lg:ml-auto' : ''}`}
           >
-            {page.propertySelection ? (
+            {page.personalInfo ? (
+              <PersonalInfoPage
+                key={page.id}
+                age={personalInfo.age}
+                location={personalInfo.location}
+                onAgeChange={(age) => onPersonalInfoChange({ ...personalInfo, age })}
+                onLocationChange={(location) => onPersonalInfoChange({ ...personalInfo, location })}
+                onBack={onBack}
+                onNext={onNext}
+                backButtonLabel={page.previousButtonLabel}
+                nextButtonLabel={page.nextButtonLabel}
+              />
+            ) : page.propertySelection ? (
               <PropertySelectionPage
                 key={page.id}
                 page={page.propertySelection}
@@ -149,6 +190,25 @@ export function HomeRoute({
                 onNext={onNext}
                 backButtonLabel={page.previousButtonLabel}
                 nextButtonLabel={page.nextButtonLabel}
+              />
+            ) : page.id === 'compass-done' ? (
+              <CompassDonePage
+                key={page.id}
+                onBack={onBack}
+                onNext={onNext}
+                backButtonLabel={page.previousButtonLabel}
+                nextButtonLabel={page.nextButtonLabel}
+              />
+            ) : page.id === 'congrats' ? (
+              <FinalPage
+                key={page.id}
+                onCopyPrompt={handleCopyPrompt}
+                onDownloadImage={handleDownloadImage}
+                onRestart={onRestart}
+                onBack={onBack}
+                copied={copied}
+                nextStep={nextStep}
+                onNextStepChange={onNextStepChange}
               />
             ) : page.principles ? (
               <PrinciplesInfo
@@ -165,6 +225,7 @@ export function HomeRoute({
               <QuizBox
                 key={page.id}
                 header={page.header}
+                subHeader={page.subHeader}
                 question={page.question}
                 illustrationSrc={page.illustrationSrc}
                 illustrationAlt={page.illustrationAlt}
