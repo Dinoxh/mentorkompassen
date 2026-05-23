@@ -274,7 +274,7 @@ export function FinalPage({
       </div>
 
       <div className="mt-5 flex justify-center gap-3 md:mt-6">
-        {onBack && <QuizButton label="Tillbaka" onClick={onBack} />}
+        {onBack && <QuizButton label="Tillbaka" onClick={onBack} direction="back" />}
       </div>
     </div>
   )

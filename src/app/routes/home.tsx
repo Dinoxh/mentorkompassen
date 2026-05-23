@@ -248,6 +248,7 @@ export function HomeRoute({
                         <QuizButton
                           label={page.previousButtonLabel ?? 'Tillbaka'}
                           onClick={onBack}
+                          direction="back"
                         />
                       </div>
                     ) : null}
@@ -255,10 +256,18 @@ export function HomeRoute({
                 ) : (
                   <div className="flex justify-center gap-3">
                     {page.previousPageId && onBack ? (
-                      <QuizButton label={page.previousButtonLabel ?? 'Tillbaka'} onClick={onBack} />
+                      <QuizButton
+                        label={page.previousButtonLabel ?? 'Tillbaka'}
+                        onClick={onBack}
+                        direction="back"
+                      />
                     ) : null}
                     {page.nextPageId && onNext ? (
-                      <QuizButton label={page.nextButtonLabel ?? 'Nästa'} onClick={onNext} />
+                      <QuizButton
+                        label={page.nextButtonLabel ?? 'Nästa'}
+                        onClick={onNext}
+                        direction="forward"
+                      />
                     ) : null}
                   </div>
                 )}

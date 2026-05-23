@@ -157,10 +157,15 @@ export function PrinciplesInfo({
 
       {/* Navigation buttons */}
       <div className="mt-6 flex justify-center gap-3">
-        <QuizButton label={activeSlide === 0 ? backButtonLabel : 'Tillbaka'} onClick={goBackward} />
+        <QuizButton
+          label={activeSlide === 0 ? backButtonLabel : 'Tillbaka'}
+          onClick={goBackward}
+          direction="back"
+        />
         <QuizButton
           label={activeSlide === totalSlides - 1 ? 'Jag är redo' : 'Nästa'}
           onClick={goForward}
+          direction="forward"
         />
       </div>
     </div>
