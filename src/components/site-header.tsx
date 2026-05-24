@@ -53,19 +53,6 @@ export function SiteHeader() {
             </g>
           </svg>
         </a>
-
-        {/* MENY circle button — right */}
-        <button
-          aria-label="Meny"
-          className="meny-btn relative flex h-14 w-14 cursor-pointer items-center justify-center rounded-full md:h-16 md:w-16"
-          style={{
-            backgroundColor: '#FFFF5C',
-          }}
-        >
-          <span className="text-xs font-extrabold uppercase tracking-wider text-black md:text-sm">
-            MENY
-          </span>
-        </button>
       </div>
     </header>
   )

@@ -23,6 +23,19 @@ export function PersonalInfoPage({
   nextButtonLabel = 'Nästa',
 }: PersonalInfoPageProps) {
   const [focusedField, setFocusedField] = useState<string | null>(null)
+  const [attemptedNext, setAttemptedNext] = useState(false)
+  const ageNum = Number(age)
+  const isAgeOutOfRange = age !== '' && (ageNum < 12 || ageNum > 23)
+  const showAgeError = attemptedNext && isAgeOutOfRange
+
+  const handleNext = () => {
+    if (isAgeOutOfRange) {
+      setAttemptedNext(true)
+      return
+    }
+    setAttemptedNext(false)
+    onNext?.()
+  }
 
   return (
     <div className="quiz-card relative flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-clip rounded-[56px] px-6 pb-8 pt-16 md:px-10 md:pb-10 md:pt-20">
@@ -71,7 +84,8 @@ export function PersonalInfoPage({
               value={age}
               onChange={(e) => {
                 const val = e.target.value
-                if (val === '' || (Number(val) >= 1 && Number(val) <= 23)) {
+                if (val === '' || (/^\d{1,2}$/.test(val) && Number(val) >= 1)) {
+                  setAttemptedNext(false)
                   onAgeChange(val)
                 }
               }}
@@ -79,7 +93,13 @@ export function PersonalInfoPage({
               onBlur={() => setFocusedField(null)}
               className="w-full rounded-2xl border-2 border-neutral-200 bg-white/80 px-5 py-4 text-base font-semibold text-neutral-800 shadow-sm outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-neutral-400 focus:border-[var(--page-accent)] focus:shadow-[0_0_0_4px_var(--page-accent-glow)]"
             />
-            <p className="mt-1 text-xs text-neutral-400">12–23 år</p>
+            {showAgeError ? (
+              <p className="mt-1 text-xs font-semibold text-red-600">
+                Ange en ålder i åldersspannet
+              </p>
+            ) : (
+              <p className="mt-1 text-xs text-neutral-400">12–23 år</p>
+            )}
           </div>
 
           <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
@@ -109,7 +129,7 @@ export function PersonalInfoPage({
 
       <div className="mt-5 flex justify-center gap-3 md:mt-6">
         {onBack && <QuizButton label={backButtonLabel} onClick={onBack} direction="back" />}
-        {onNext && <QuizButton label={nextButtonLabel} onClick={onNext} direction="forward" />}
+        {onNext && <QuizButton label={nextButtonLabel} onClick={handleNext} direction="forward" />}
       </div>
     </div>
   )

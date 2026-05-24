@@ -2,38 +2,56 @@ type SiteFooterProps = {
   brandColor?: string
 }
 
-export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
-  const currentYear = new Date().getFullYear()
+const footerLinkClass =
+  'relative inline-block transition-colors duration-[450ms] ease-[cubic-bezier(0.46,0.7,0,1.1)] delay-[130ms] hover:text-[#FFFF5C] after:pointer-events-none after:absolute after:-bottom-0.5 after:left-0 after:h-[1.5px] after:w-0 after:bg-current after:transition-[width] after:duration-[450ms] after:ease-[cubic-bezier(0.46,0.7,0,1.1)] after:delay-[130ms] hover:after:w-full'
 
-  // All footer text is black
+export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
   const textColor = '#000000'
-  const textMuted = 'rgba(0,0,0,0.65)'
-  const textFaint = 'rgba(0,0,0,0.4)'
-  const accentColor = '#000000'
   const buttonBg = '#FFFF5C'
-  const buttonText = '#000000'
-  const borderColor = 'rgba(0,0,0,0.12)'
-  const hoverLinkColor = '#000000'
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <footer className="animate-footer-rise relative mt-auto">
-      {/* Curved wave top */}
-      <svg
-        viewBox="0 0 1585 250"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="animate-wave block w-full"
-        preserveAspectRatio="none"
-        style={{ height: 'clamp(80px, 15vw, 200px)' }}
-      >
-        <path
-          d="M0 250V50C445.783 -101 535.349 157.6 860.345 -21.6C1185.34 -200.8 1585 -40 1585 -40V250H0Z"
-          fill={brandColor}
-          style={{ transition: 'fill 0.8s ease' }}
-        />
-      </svg>
+      <div className="relative">
+        <svg
+          viewBox="0 0 1585 250"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="animate-wave block w-full"
+          preserveAspectRatio="none"
+          style={{ height: 'clamp(80px, 15vw, 200px)' }}
+        >
+          <path
+            d="M0 250V50C445.783 -101 535.349 157.6 860.345 -21.6C1185.34 -200.8 1585 -40 1585 -40V250H0Z"
+            fill={brandColor}
+            style={{ transition: 'fill 0.8s ease' }}
+          />
+        </svg>
 
-      {/* Footer content area */}
+        <button
+          onClick={scrollToTop}
+          aria-label="Tillbaka till toppen"
+          className="absolute right-6 top-2 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-2 border-black transition-all duration-200 hover:-translate-y-1 hover:shadow-lg md:right-10 md:top-4 md:h-16 md:w-16"
+          style={{ backgroundColor: buttonBg }}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 19V5M5 12l7-7 7 7" />
+          </svg>
+        </button>
+      </div>
+
       <div
         style={{
           backgroundColor: brandColor,
@@ -43,20 +61,18 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
       >
         <div className="mx-auto max-w-[1420px] px-6 pb-10 pt-4 md:px-10 md:pb-14 md:pt-6">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Column 1: Brand + Contact */}
             <div
-              className="animate-stagger-up flex flex-col gap-4"
+              className="animate-stagger-up flex flex-col gap-6"
               style={{ animationDelay: '0.1s' }}
             >
-              {/* Mentor logo — black */}
               <a href="https://mentor.se" aria-label="Mentor Sverige">
                 <svg
-                  width="139"
-                  height="30"
+                  width="180"
+                  height="40"
                   viewBox="0 0 307 67"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="mb-2 h-8 w-auto"
+                  className="h-12 w-auto"
                 >
                   <path d="M5.68529 56.6953H5.64941V56.7312H5.68529V56.6953Z" fill="black" />
                   <path
@@ -98,183 +114,131 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
                 </svg>
               </a>
 
-              <div className="flex flex-col gap-1 text-sm" style={{ color: textMuted }}>
-                <p className="font-semibold" style={{ color: textColor }}>
-                  Kontakta oss
-                </p>
-                <p>Mentor Sverige</p>
-                <p>Sveavägen 68, 111 34 Stockholm</p>
-                <a
-                  href="mailto:info@mentor.se"
-                  className="transition-colors duration-200"
-                  style={{ color: textMuted, textDecoration: 'none' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = hoverLinkColor
-                    e.currentTarget.style.textDecoration = 'underline'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = textMuted
-                    e.currentTarget.style.textDecoration = 'none'
-                  }}
-                >
+              <p className="max-w-[280px] text-base font-medium leading-snug">
+                Mentor Sverige är en ideell organisation som arbetar med mentorskap för ungdomar.
+              </p>
+
+              <div className="flex items-center gap-4 pt-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-4xl font-black leading-none">90</span>
+                  <div className="text-left text-[10px] font-black uppercase leading-tight">
+                    <div>Svensk</div>
+                    <div>Insamlings</div>
+                    <div>Kontroll</div>
+                  </div>
+                </div>
+                <div className="flex flex-col text-center">
+                  <span className="text-[15px] font-black leading-tight">tryggt</span>
+                  <span className="text-[15px] font-black leading-tight">givande</span>
+                  <span className="mt-1 text-[9px] font-bold lowercase leading-tight">
+                    givasverige
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <FooterColumn title="Kontakt" delay="0.2s">
+              <FooterLink href="https://mentor.se/om-oss">Om oss</FooterLink>
+              <FooterLink href="https://mentor.se/kontakt">Kontakta oss</FooterLink>
+              <li className="pt-3 text-base font-medium">
+                <p>Kåkbrinken 11A</p>
+                <p>111 27 Stockholm</p>
+              </li>
+              <li className="text-base font-medium">
+                <a href="mailto:info@mentor.se" className={footerLinkClass}>
                   info@mentor.se
                 </a>
-              </div>
-            </div>
+              </li>
+              <li className="text-base font-medium">
+                <a href="tel:+46877891180" className={footerLinkClass}>
+                  08-789 11 80
+                </a>
+              </li>
+            </FooterColumn>
 
-            {/* Column 2: Om oss */}
-            <div className="animate-stagger-up" style={{ animationDelay: '0.2s' }}>
-              <h3
-                className="mb-3 text-xs font-bold uppercase tracking-wider"
-                style={{ color: accentColor }}
-              >
-                Om oss
-              </h3>
-              <ul className="space-y-2 text-sm">
-                <FooterLink
-                  href="https://mentor.se/om-mentor"
-                  color={textMuted}
-                  hoverColor={hoverLinkColor}
-                >
-                  Om Mentor
-                </FooterLink>
-                <FooterLink
-                  href="https://mentor.se/kontakt"
-                  color={textMuted}
-                  hoverColor={hoverLinkColor}
-                >
-                  Kontakt
-                </FooterLink>
-                <FooterLink
-                  href="https://mentor.se/bli-mentor"
-                  color={textMuted}
-                  hoverColor={hoverLinkColor}
-                >
-                  Bli Mentor
-                </FooterLink>
-              </ul>
-            </div>
+            <FooterColumn title="Länkar" delay="0.3s">
+              <FooterLink href="https://mentor.se/stod-oss">Stöd oss</FooterLink>
+              <FooterLink href="https://mentor.se/fragor-och-svar">Frågor och svar</FooterLink>
+              <FooterLink href="https://mentor.se/om-oss/karriar/">Karriär</FooterLink>
+              <FooterLink href="https://mentor.se/cookiepolicy">Cookiepolicy</FooterLink>
+              <FooterLink href="#cookie-settings">Cookieinställningar</FooterLink>
+            </FooterColumn>
 
-            {/* Column 3: Program */}
-            <div className="animate-stagger-up" style={{ animationDelay: '0.3s' }}>
-              <h3
-                className="mb-3 text-xs font-bold uppercase tracking-wider"
-                style={{ color: accentColor }}
-              >
-                Program
-              </h3>
-              <ul className="space-y-2 text-sm">
-                <FooterLink
-                  href="https://mentor.se/mentor-boost"
-                  color={textMuted}
-                  hoverColor={hoverLinkColor}
-                >
-                  Mentor Boost
-                </FooterLink>
-                <FooterLink
-                  href="https://mentor.se/our-programs"
-                  color={textMuted}
-                  hoverColor={hoverLinkColor}
-                >
-                  Våra program
-                </FooterLink>
-              </ul>
-            </div>
-
-            {/* Column 4: Nyhetsbrev */}
             <div className="animate-stagger-up" style={{ animationDelay: '0.4s' }}>
-              <h3
-                className="mb-3 text-xs font-bold uppercase tracking-wider"
-                style={{ color: accentColor }}
-              >
-                Nyhetsbrev
-              </h3>
-              <p className="mb-4 text-sm" style={{ color: textMuted }}>
-                Prenumerera på vårt nyhetsbrev för att hålla dig uppdaterad.
+              <h3 className="mb-5 text-xl font-black">Nyhetsbrev</h3>
+              <p className="mb-1 text-base font-medium">
+                Få våra senaste nyheter, direkt i din inkorg:
               </p>
-              <div className="flex items-center gap-2">
-                <input
-                  type="email"
-                  placeholder="Din e-postadress"
-                  className="footer-input flex-1 rounded-full border px-4 py-2 text-sm text-black outline-none transition-shadow duration-200 placeholder:text-gray-400"
-                  style={{
-                    borderColor: borderColor,
-                    backgroundColor: 'rgba(255,255,255,0.95)',
-                  }}
-                />
-                <button
-                  className="flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-full border-2 border-[#32373c] px-5 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
-                  style={{
-                    backgroundColor: buttonBg,
-                    color: buttonText,
-                  }}
+              <a
+                href="https://mentor.us19.list-manage.com/subscribe?u=f6a30b1163225c3e796b9cfd0&id=a3b9aa6699"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`text-base font-bold underline ${footerLinkClass}`}
+              >
+                Prenumerera här!
+              </a>
+              <p className="mt-6 text-base font-medium">
+                Läs hur Mentor Sverige behandlar personuppgifter i vår{' '}
+                <a
+                  href="https://mentor.se/om-oss/integritetspolicy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`font-bold underline ${footerLinkClass}`}
                 >
-                  SKICKA IN
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
+                  integritetspolicy
+                </a>
+              </p>
             </div>
           </div>
 
-          {/* Följ oss (social links) */}
-          <div
-            className="mt-10 flex flex-wrap items-center gap-4"
-            style={{ borderTop: `1px solid ${borderColor}`, paddingTop: '1.5rem' }}
-          >
-            <span
-              className="text-xs font-bold uppercase tracking-wider"
-              style={{ color: accentColor }}
-            >
-              Följ oss
-            </span>
-            <div className="flex gap-3">
-              <SocialLink
+          <div className="mt-12 flex flex-col items-start justify-between gap-4 text-base font-medium sm:flex-row sm:items-center">
+            <p>&copy; {new Date().getFullYear()} Mentor</p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <a
                 href="https://www.instagram.com/mentorsverige/"
-                label="Instagram"
-                color={textMuted}
-                hoverColor={textColor}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`font-bold ${footerLinkClass}`}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                </svg>
-              </SocialLink>
-              <SocialLink
-                href="https://www.facebook.com/mentorsverige"
-                label="Facebook"
-                color={textMuted}
-                hoverColor={textColor}
+                Instagram
+              </a>
+              <span aria-hidden>/</span>
+              <a
+                href="https://www.youtube.com/channel/UCxY9S7uJI6C-pPbBNQkrp0Q"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`font-bold ${footerLinkClass}`}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385h-3.047v-3.47h3.047v-2.642c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385c5.738-.9 10.126-5.864 10.126-11.854z" />
-                </svg>
-              </SocialLink>
-              <SocialLink
+                YouTube
+              </a>
+              <span aria-hidden>/</span>
+              <a
                 href="https://www.linkedin.com/company/mentor-sverige/"
-                label="LinkedIn"
-                color={textMuted}
-                hoverColor={textColor}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`font-bold ${footerLinkClass}`}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667h-3.554v-11.452h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zm-15.11-13.019c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019h-3.564v-11.452h3.564v11.452zm15.106-20.452h-20.454c-.979 0-1.771.774-1.771 1.729v20.542c0 .956.792 1.729 1.771 1.729h20.451c.978 0 1.778-.773 1.778-1.729v-20.542c0-.955-.8-1.729-1.778-1.729z" />
-                </svg>
-              </SocialLink>
+                LinkedIn
+              </a>
+              <span aria-hidden>/</span>
+              <a
+                href="https://www.facebook.com/mentorsverige"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`font-bold ${footerLinkClass}`}
+              >
+                Facebook
+              </a>
+              <span aria-hidden>/</span>
+              <a
+                href="https://www.tiktok.com/@mentorsverige"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`font-bold ${footerLinkClass}`}
+              >
+                TikTok
+              </a>
             </div>
-          </div>
-
-          {/* Copyright */}
-          <div className="mt-6 text-center text-xs" style={{ color: textFaint }}>
-            <p>&copy; {currentYear} Mentor Sverige. Alla rättigheter förbehållna.</p>
           </div>
         </div>
       </div>
@@ -282,61 +246,29 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
   )
 }
 
-function FooterLink({
-  href,
-  color,
-  hoverColor,
+function FooterColumn({
+  title,
+  delay,
   children,
 }: {
-  href: string
-  color: string
-  hoverColor: string
+  title: string
+  delay: string
   children: React.ReactNode
 }) {
   return (
-    <li>
-      <a
-        href={href}
-        className="transition-colors duration-200"
-        style={{ color, textDecoration: 'none' }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = hoverColor
-          e.currentTarget.style.textDecoration = 'underline'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = color
-          e.currentTarget.style.textDecoration = 'none'
-        }}
-      >
-        {children}
-      </a>
-    </li>
+    <div className="animate-stagger-up" style={{ animationDelay: delay }}>
+      <h3 className="mb-5 text-xl font-black">{title}</h3>
+      <ul className="space-y-3">{children}</ul>
+    </div>
   )
 }
 
-function SocialLink({
-  href,
-  label,
-  color,
-  hoverColor,
-  children,
-}: {
-  href: string
-  label: string
-  color: string
-  hoverColor: string
-  children: React.ReactNode
-}) {
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a
-      href={href}
-      aria-label={label}
-      className="social-pop inline-block transition-colors duration-200"
-      style={{ color }}
-      onMouseEnter={(e) => (e.currentTarget.style.color = hoverColor)}
-      onMouseLeave={(e) => (e.currentTarget.style.color = color)}
-    >
-      {children}
-    </a>
+    <li>
+      <a href={href} className={`text-base font-medium ${footerLinkClass}`}>
+        {children}
+      </a>
+    </li>
   )
 }
