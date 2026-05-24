@@ -166,7 +166,7 @@ function AccordionSection({
       <button
         type="button"
         onClick={onToggle}
-        className="flex w-full cursor-pointer items-center justify-between rounded-2xl border border-black/10 bg-white/60 px-5 py-4 text-left backdrop-blur-sm transition-all duration-300 hover:bg-white/80"
+        className="flex w-full cursor-pointer items-center justify-between rounded-2xl border border-black/10 bg-white/60 px-5 py-3 text-left backdrop-blur-sm transition-all duration-300 hover:bg-white/80"
       >
         <span className="text-sm font-bold text-neutral-800 md:text-base">{title}</span>
         <span
@@ -230,9 +230,9 @@ export function FinalPage({
   }
 
   return (
-    <div className="quiz-card relative flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-clip rounded-[56px] px-6 pb-8 pt-10 md:px-10 md:pb-10 md:pt-12">
-      <div className="quiz-scroll flex-1 overflow-x-hidden overflow-y-scroll pr-1">
-        <div className="mb-6 text-center">
+    <div className="quiz-card relative flex h-[720px] max-h-[calc(100vh-2rem)] w-full max-w-[760px] flex-col overflow-clip rounded-[56px] px-6 pb-6 pt-8 md:px-10 md:pb-8 md:pt-10">
+      <div className="quiz-scroll flex-1 overflow-x-hidden overflow-y-auto pr-1">
+        <div className="mb-4 text-center">
           <h1
             className="animate-shimmer-text animate-text-reveal text-2xl font-black tracking-tight md:text-3xl"
             style={{ animationDelay: '0.1s' }}
@@ -240,7 +240,7 @@ export function FinalPage({
             Vad vill du göra nu?
           </h1>
           <p
-            className="animate-fade-in mt-2 text-sm font-medium text-neutral-600 md:text-base"
+            className="animate-fade-in mt-1 text-sm font-medium text-neutral-600 md:text-base"
             style={{ animationDelay: '0.3s' }}
           >
             Din Mentorkompass är en startpunkt. Välj ett nästa steg som känns mest intressant för
@@ -248,7 +248,7 @@ export function FinalPage({
           </p>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <AccordionSection
             title="Jag är nyfiken på mentorskap"
             isOpen={openSection === 'mentorship'}
@@ -381,7 +381,7 @@ export function FinalPage({
         </div>
 
         <div
-          className="animate-fade-in mt-6 rounded-3xl border border-dashed border-black/15 px-5 py-4 text-center"
+          className="animate-fade-in mt-4 rounded-3xl border border-dashed border-black/15 px-5 py-3 text-center"
           style={{ animationDelay: '0.8s' }}
         >
           <p className="text-sm font-medium text-neutral-500">
@@ -391,7 +391,7 @@ export function FinalPage({
         </div>
 
         <div
-          className="animate-fade-in mt-6 flex flex-wrap justify-center gap-3"
+          className="animate-fade-in mt-4 flex flex-wrap justify-center gap-3"
           style={{ animationDelay: '0.9s' }}
         >
           <QuizButton
@@ -403,7 +403,7 @@ export function FinalPage({
         </div>
       </div>
 
-      <div className="mt-5 flex justify-center gap-3 md:mt-6">
+      <div className="mt-4 flex justify-center gap-3">
         {onBack && <QuizButton label="Tillbaka" onClick={onBack} direction="back" />}
       </div>
     </div>
