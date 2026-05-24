@@ -103,7 +103,7 @@ export function QuizButton({
             : '-translate-x-[200%] group-hover:translate-x-0'
         }`}
       >
-        {icon ?? <ArrowIcon direction={direction} />}
+        {icon ?? <ArrowIcon direction={direction as 'forward' | 'back'} />}
       </span>
     </button>
   )
