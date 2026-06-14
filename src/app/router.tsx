@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
 import { HomeRoute } from '@/app/routes/home'
 import { getDefaultQuizPage, getQuizPage, quizPages } from '@/features/quiz/data/quiz-pages'
+import { usePersistentState } from '@/hooks/use-persistent-state'
+
+const STORAGE_KEYS = {
+  selections: 'mentorkompassen:selections',
+  personalInfo: 'mentorkompassen:personal-info',
+  nextStep: 'mentorkompassen:next-step',
+} as const
+
+const DEFAULT_PERSONAL_INFO = { age: '', location: '' }
 
 function getPageIdFromHash(hash: string) {
   return hash.replace(/^#\/?/, '')
@@ -16,11 +25,14 @@ export function AppRouter() {
     const pageId = getPageIdFromHash(window.location.hash)
     return getQuizPage(pageId)?.id ?? defaultPage.id
   })
-  const [selectedPropertiesByPage, setSelectedPropertiesByPage] = useState<
+  const [selectedPropertiesByPage, setSelectedPropertiesByPage] = usePersistentState<
     Record<string, string[]>
-  >({})
-  const [personalInfo, setPersonalInfo] = useState({ age: '', location: '' })
-  const [nextStep, setNextStep] = useState('')
+  >(STORAGE_KEYS.selections, {})
+  const [personalInfo, setPersonalInfo] = usePersistentState(
+    STORAGE_KEYS.personalInfo,
+    DEFAULT_PERSONAL_INFO
+  )
+  const [nextStep, setNextStep] = usePersistentState(STORAGE_KEYS.nextStep, '')
   const [slideDirection, setSlideDirection] = useState<'forward' | 'back' | null>(null)
 
   useEffect(() => {
@@ -61,6 +73,10 @@ export function AppRouter() {
 
   const handleRestart = () => {
     const firstSelectionPage = quizPages.find((p) => p.propertySelection)
+    // Wipe saved progress so the quiz truly starts over (also clears sessionStorage).
+    setSelectedPropertiesByPage({})
+    setPersonalInfo(DEFAULT_PERSONAL_INFO)
+    setNextStep('')
     setSlideDirection('forward')
     window.location.hash = `/${firstSelectionPage?.id ?? quizPages[0].id}`
   }
