@@ -112,9 +112,15 @@ export function HomeRoute({
 
   const handleCopyPrompt = async () => {
     const prompt = buildPrompt(selectionsByPage, personalInfo, nextStep)
-    await navigator.clipboard.writeText(prompt)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      await navigator.clipboard.writeText(prompt)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Clipboard may be unavailable (e.g. denied permission); the prompt is still
+      // returned so it can be prefilled into the AI service URL.
+    }
+    return prompt
   }
 
   const handleDownloadImage = () => {
@@ -206,7 +212,6 @@ export function HomeRoute({
                 onDownloadImage={handleDownloadImage}
                 onRestart={onRestart}
                 onBack={onBack}
-                copied={copied}
                 nextStep={nextStep}
                 onNextStepChange={onNextStepChange}
               />
