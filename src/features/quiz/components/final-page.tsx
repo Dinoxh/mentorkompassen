@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { QuizButton } from '@/features/quiz/components/quiz-button'
+import { AiRedirectDialog } from '@/features/quiz/components/ai-redirect-dialog'
 
 function ClaudeIcon({ className }: { className?: string }) {
   return (
@@ -105,18 +106,43 @@ function RestartIcon() {
   )
 }
 
+// `url` is the destination opened in a new tab. For services that support prefilling
+// the prompt from the URL (`autoFill`), it ends in the query param the prompt is appended to;
+// otherwise the user pastes the (already copied) prompt manually.
 const aiServices = [
-  { name: 'Claude', icon: ClaudeIcon, url: 'https://claude.ai', bg: '#D97757' },
-  { name: 'Gemini', icon: GeminiIcon, url: 'https://gemini.google.com', bg: '#FFFFFF' },
-  { name: 'ChatGPT', icon: ChatGPTIcon, url: 'https://chat.openai.com', bg: '#FFFFFF' },
+  {
+    name: 'Claude',
+    icon: ClaudeIcon,
+    bg: '#D97757',
+    autoFill: true,
+    url: 'https://claude.ai/new?q=',
+  },
+  {
+    name: 'Gemini',
+    icon: GeminiIcon,
+    bg: '#FFFFFF',
+    autoFill: false,
+    url: 'https://gemini.google.com/app',
+  },
+  // ChatGPT's `?q=` prefill is login-dependent and breaks on long prompts, so open the
+  // plain site and rely on the copied prompt being pasted (see AiRedirectDialog steps).
+  {
+    name: 'ChatGPT',
+    icon: ChatGPTIcon,
+    bg: '#FFFFFF',
+    autoFill: false,
+    url: 'https://chatgpt.com/',
+  },
 ] as const
 
+type AiService = (typeof aiServices)[number]
+
 type FinalPageProps = {
-  onCopyPrompt: () => void
+  /** Copies the generated prompt to the clipboard and resolves with the prompt text. */
+  onCopyPrompt: () => Promise<string>
   onDownloadImage: () => void
   onRestart: () => void
   onBack?: () => void
-  copied: boolean
   nextStep: string
   onNextStepChange: (value: string) => void
 }
@@ -210,16 +236,34 @@ export function FinalPage({
   onDownloadImage,
   onRestart,
   onBack,
-  copied,
   nextStep,
   onNextStepChange,
 }: FinalPageProps) {
   const [openSection, setOpenSection] = useState<string | null>(null)
   const [focusedField, setFocusedField] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [pendingService, setPendingService] = useState<AiService | null>(null)
+  const [pendingPrompt, setPendingPrompt] = useState('')
 
   const toggleSection = (section: string) => {
     setOpenSection(openSection === section ? null : section)
+  }
+
+  // Copy the prompt (a user gesture, so the clipboard write is allowed) and open the
+  // confirmation dialog. The redirect itself waits for the user to confirm.
+  const handleServiceClick = async (service: AiService) => {
+    const prompt = await onCopyPrompt()
+    setPendingPrompt(prompt)
+    setPendingService(service)
+  }
+
+  const handleConfirmRedirect = () => {
+    if (!pendingService) return
+    const url = pendingService.autoFill
+      ? `${pendingService.url}${encodeURIComponent(pendingPrompt)}`
+      : pendingService.url
+    window.open(url, '_blank', 'noopener,noreferrer')
+    setPendingService(null)
   }
 
   const handleSaveStep = () => {
@@ -309,27 +353,19 @@ export function FinalPage({
             </p>
             <BulletList items={aiBullets} label="AI kan hjälpa dig med:" />
             <div className="mt-4 flex flex-wrap items-center gap-4">
-              {aiServices.map(({ name, icon: Icon, url, bg }) => (
+              {aiServices.map((service) => (
                 <button
-                  key={name}
+                  key={service.name}
                   type="button"
-                  aria-label={`Kopiera prompt och öppna ${name}`}
-                  onClick={() => {
-                    onCopyPrompt()
-                    window.open(url, '_blank', 'noopener,noreferrer')
-                  }}
+                  aria-label={`Kopiera prompt och öppna ${service.name}`}
+                  onClick={() => handleServiceClick(service)}
                   className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl border border-black/10 shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-sm"
-                  style={{ backgroundColor: bg }}
+                  style={{ backgroundColor: service.bg }}
                 >
-                  <Icon className="h-7 w-7" />
+                  <service.icon className="h-7 w-7" />
                 </button>
               ))}
             </div>
-            {copied && (
-              <p className="mt-2 text-xs font-semibold text-[var(--page-accent-active)]">
-                Prompt kopierad!
-              </p>
-            )}
           </AccordionSection>
 
           <AccordionSection
@@ -406,6 +442,14 @@ export function FinalPage({
       <div className="mt-4 flex justify-center gap-3">
         {onBack && <QuizButton label="Tillbaka" onClick={onBack} direction="back" />}
       </div>
+
+      <AiRedirectDialog
+        service={pendingService}
+        onOpenChange={(open) => {
+          if (!open) setPendingService(null)
+        }}
+        onConfirm={handleConfirmRedirect}
+      />
     </div>
   )
 }
