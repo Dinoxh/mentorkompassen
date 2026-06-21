@@ -120,7 +120,11 @@ export function SiteFooter({ brandColor = '#00B469' }: SiteFooterProps) {
 
               <div className="flex items-center gap-4 pt-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-4xl font-black leading-none">90</span>
+                  <div className="flex flex-col items-center leading-none">
+                    <span className="text-4xl font-black leading-none">90</span>
+                    <span className="mt-0.5 text-[9px] font-bold tracking-[0.18em]">KONTO</span>
+                  </div>
+                  <div className="h-9 w-px self-stretch bg-current" />
                   <div className="text-left text-[10px] font-black uppercase leading-tight">
                     <div>Svensk</div>
                     <div>Insamlings</div>

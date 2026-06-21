@@ -11,7 +11,6 @@ import { compassSections, type QuizPage } from '@/features/quiz/data/quiz-pages'
 import { getPageTheme } from '@/features/quiz/data/page-themes'
 import { LavaLamp } from '@/components/lava-lamp'
 import { SiteHeader } from '@/components/site-header'
-import { SiteFooter } from '@/components/site-footer'
 
 function buildPrompt(
   selectionsByPage: Record<string, string[]>,
@@ -281,8 +280,6 @@ export function HomeRoute({
           </div>
         </div>
       </main>
-
-      <SiteFooter brandColor={theme.brandColor} />
     </div>
   )
 }
